@@ -51,7 +51,7 @@ export function DataTable<T>({
   if (isLoading) {
     return (
       <div className="space-y-3">
-        <div className="rounded-md border">
+        <div className="rounded-xl shadow-lg overflow-hidden bg-white">
           <Table>
             <TableHeader>
               <TableRow>
@@ -83,8 +83,8 @@ export function DataTable<T>({
   }
 
   return (
-    <div className="space-y-4">
-      <div className="rounded-md border">
+    <div className="space-y-6">
+      <div className="rounded-xl shadow-lg overflow-hidden bg-white">
         <Table>
           <TableHeader>
             <TableRow>
