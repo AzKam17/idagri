@@ -89,7 +89,7 @@ export function PlantationForm({ plantation, onSuccess }: PlantationFormProps) {
     const lat = watch('latitude');
     const lng = watch('longitude');
     if (lat && lng) {
-      setPolygonPoints(prev => [...prev, [lat, lng]]);
+      setPolygonPoints(prev => [...prev, [Number(lat), Number(lng)]]);
     }
   };
 
@@ -112,10 +112,10 @@ export function PlantationForm({ plantation, onSuccess }: PlantationFormProps) {
           name: data.name,
           farmerId: data.farmerId,
           crops: cropsArray,
-          area: data.area,
+          area: Number(data.area),
           city: data.city,
-          latitude: data.latitude,
-          longitude: data.longitude,
+          latitude: Number(data.latitude),
+          longitude: Number(data.longitude),
           polygon: polygonPoints.length > 0 ? polygonPoints : undefined,
           employeeIds: data.employeeIds,
           updatedAt: now,
@@ -129,10 +129,10 @@ export function PlantationForm({ plantation, onSuccess }: PlantationFormProps) {
           name: data.name,
           farmerId: data.farmerId,
           crops: cropsArray,
-          area: data.area,
+          area: Number(data.area),
           city: data.city,
-          latitude: data.latitude,
-          longitude: data.longitude,
+          latitude: Number(data.latitude),
+          longitude: Number(data.longitude),
           polygon: polygonPoints.length > 0 ? polygonPoints : undefined,
           employeeIds: data.employeeIds,
           createdAt: now,

@@ -73,7 +73,7 @@ function PlantationsPageContent() {
     },
     {
       header: 'Location',
-      cell: (plantation) => `${plantation.latitude.toFixed(4)}, ${plantation.longitude.toFixed(4)}`,
+      cell: (plantation) => `${Number(plantation.latitude).toFixed(4)}, ${Number(plantation.longitude).toFixed(4)}`,
     },
     {
       header: 'Actions',
