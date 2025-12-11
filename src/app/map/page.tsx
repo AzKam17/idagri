@@ -145,7 +145,7 @@ export default function MapPage() {
               <div>
                 <p className="text-sm text-muted-foreground">Total Area</p>
                 <p className="text-2xl font-bold">
-                  {plantations.reduce((sum, p) => sum + p.area, 0).toFixed(2)} ha
+                  {plantations.reduce((sum, p) => sum + Number(p.area), 0).toFixed(2)} ha
                 </p>
               </div>
               <div>
@@ -156,7 +156,7 @@ export default function MapPage() {
                 <div className="pt-3 border-t">
                   <p className="text-sm text-muted-foreground">Filtered Area</p>
                   <p className="text-2xl font-bold">
-                    {filteredPlantations.reduce((sum, p) => sum + p.area, 0).toFixed(2)} ha
+                    {filteredPlantations.reduce((sum, p) => sum + Number(p.area), 0).toFixed(2)} ha
                   </p>
                 </div>
               )}

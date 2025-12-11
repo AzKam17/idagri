@@ -12,3 +12,5 @@
 12. Make one line comments for commits.
 13. Ensure all components are functional components using React hooks.
 14. Use leaflet for map rendering and interactions.
+15. Do not use solid borders in the design.
+16. use light shadows for depth.
