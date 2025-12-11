@@ -3,6 +3,7 @@
 import React, { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAppStore } from '@/store';
+import { translations } from '@/lib/translations';
 
 import { Farmer } from '@/types';
 import { localStorageService } from '@/lib/localStorage';
@@ -107,20 +108,20 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <User className="h-5 w-5" />
-          {farmer ? 'Edit Farmer' : 'Add New Farmer'}
+          {farmer ? translations.farmers.editFarmer : translations.farmers.addFarmer}
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-7">
           {/* Photo Upload */}
-          <div className="space-y-2">
-            <Label>Photo</Label>
+          <div className="space-y-2.5">
+            <Label>{translations.farmers.photo}</Label>
             <div className="flex items-center gap-4">
               {photo && (
                 <img
                   src={photo}
-                  alt="Farmer"
-                  className="h-20 w-20 rounded-full object-cover border-2"
+                  alt="Agriculteur"
+                  className="h-24 w-24 rounded-full object-cover border-2 shadow-md"
                 />
               )}
               <div>
@@ -139,7 +140,7 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                   disabled={isSubmitting}
                 >
                   <Upload className="h-4 w-4 mr-2" />
-                  Upload Photo
+                  {translations.farmers.photoUpload}
                 </Button>
               </div>
             </div>
@@ -147,14 +148,14 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
 
           {/* Name Fields */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               <Label htmlFor="firstName" className="flex items-center gap-2">
                 <User className="h-4 w-4" />
-                First Name *
+                {translations.farmers.firstName} *
               </Label>
               <Input
                 id="firstName"
-                {...register('firstName', { required: 'First name is required' })}
+                {...register('firstName', { required: `${translations.farmers.firstName} est requis` })}
                 disabled={isSubmitting}
                 className={cn(isSubmitting && 'bg-muted cursor-not-allowed')}
               />
@@ -163,14 +164,14 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
               )}
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               <Label htmlFor="lastName" className="flex items-center gap-2">
                 <User className="h-4 w-4" />
-                Last Name *
+                {translations.farmers.lastName} *
               </Label>
               <Input
                 id="lastName"
-                {...register('lastName', { required: 'Last name is required' })}
+                {...register('lastName', { required: `${translations.farmers.lastName} est requis` })}
                 disabled={isSubmitting}
                 className={cn(isSubmitting && 'bg-muted cursor-not-allowed')}
               />
@@ -181,14 +182,14 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
           </div>
 
           {/* Profession */}
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             <Label htmlFor="profession" className="flex items-center gap-2">
               <Briefcase className="h-4 w-4" />
-              Profession *
+              {translations.farmers.profession} *
             </Label>
             <Input
               id="profession"
-              {...register('profession', { required: 'Profession is required' })}
+              {...register('profession', { required: `${translations.farmers.profession} est requise` })}
               disabled={isSubmitting}
               className={cn(isSubmitting && 'bg-muted cursor-not-allowed')}
             />
@@ -198,14 +199,14 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
           </div>
 
           {/* City */}
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             <Label htmlFor="city" className="flex items-center gap-2">
               <MapPin className="h-4 w-4" />
-              City *
+              {translations.farmers.city} *
             </Label>
             <Input
               id="city"
-              {...register('city', { required: 'City is required' })}
+              {...register('city', { required: `${translations.farmers.city} est requise` })}
               disabled={isSubmitting}
               className={cn(isSubmitting && 'bg-muted cursor-not-allowed')}
             />
@@ -215,18 +216,18 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
           </div>
 
           {/* Number of Employees */}
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             <Label htmlFor="numberOfEmployees" className="flex items-center gap-2">
               <Users className="h-4 w-4" />
-              Number of Employees *
+              {translations.farmers.numberOfEmployees} *
             </Label>
             <Input
               id="numberOfEmployees"
               type="number"
               min="0"
               {...register('numberOfEmployees', {
-                required: 'Number of employees is required',
-                min: { value: 0, message: 'Must be at least 0' },
+                required: `${translations.farmers.numberOfEmployees} est requis`,
+                min: { value: 0, message: 'Doit être au moins 0' },
               })}
               disabled={isSubmitting}
               className={cn(isSubmitting && 'bg-muted cursor-not-allowed')}
@@ -243,12 +244,12 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
             {isSubmitting ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                {farmer ? 'Updating...' : 'Creating...'}
+                {farmer ? 'Mise à jour...' : 'Création...'}
               </>
             ) : (
               <>
                 <Save className="h-4 w-4 mr-2" />
-                {farmer ? 'Update Farmer' : 'Create Farmer'}
+                {farmer ? 'Mettre à jour' : 'Créer'}
               </>
             )}
           </Button>

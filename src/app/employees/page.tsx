@@ -3,7 +3,7 @@
 import React, { useState, Suspense } from 'react';
 import { useAppStore } from '@/store';
 import { useSearchParams } from 'next/navigation';
-
+import { translations } from '@/lib/translations';
 
 import { Employee } from '@/types';
 import { localStorageService } from '@/lib/localStorage';
@@ -27,7 +27,7 @@ function EmployeesPageContent() {
   const paginatedEmployees = employees.slice((page - 1) * pageSize, page * pageSize);
 
   const handleDelete = (employee: Employee) => {
-    if (confirm(`Are you sure you want to delete ${employee.firstName} ${employee.lastName}?`)) {
+    if (confirm(`${translations.employees.confirmDelete}`)) {
       localStorageService.deleteEmployee(employee.id);
       deleteEmployee(employee.id);
     }
@@ -37,36 +37,36 @@ function EmployeesPageContent() {
     return plantationIds
       .map(id => {
         const plantation = plantations.find(p => p.id === id);
-        return plantation?.name || 'Unknown';
+        return plantation?.name || 'Inconnue';
       })
       .join(', ');
   };
 
   const columns: Column<Employee>[] = [
     {
-      header: 'Name',
+      header: 'Nom',
       icon: <Users className="h-4 w-4" />,
       cell: (employee) => `${employee.firstName} ${employee.lastName}`,
     },
     {
-      header: 'Position',
+      header: translations.employees.position,
       icon: <Briefcase className="h-4 w-4" />,
       accessorKey: 'position',
     },
     {
-      header: 'City',
+      header: translations.employees.city,
       icon: <MapPin className="h-4 w-4" />,
       accessorKey: 'city',
     },
     {
-      header: 'Plantations',
+      header: translations.employees.assignedPlantations,
       cell: (employee) => {
         const names = getPlantationNames(employee.plantationIds);
-        return names || 'None assigned';
+        return names || 'Aucune assignée';
       },
     },
     {
-      header: 'Actions',
+      header: translations.common.actions,
       cell: (employee) => (
         <div className="flex gap-2">
           <Button
@@ -98,21 +98,22 @@ function EmployeesPageContent() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
-            <Users className="h-8 w-8" />
-            Employees
+        <div className="space-y-1">
+          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
+            <Users className="h-9 w-9" />
+            {translations.employees.title}
           </h1>
-          <p className="text-muted-foreground">Manage and view all employees</p>
+          <p className="text-muted-foreground">Gérer et consulter tous les employés</p>
         </div>
         <Button
           onClick={() => {
             setSelectedEmployee(null);
             setIsAddDialogOpen(true);
           }}
+          size="lg"
         >
-          <Plus className="h-4 w-4 mr-2" />
-          Add Employee
+          <Plus className="h-5 w-5 mr-2" />
+          {translations.employees.addEmployee}
         </Button>
       </div>
 
@@ -137,8 +138,8 @@ function EmployeesPageContent() {
       >
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>
-              {selectedEmployee ? 'Edit Employee' : 'Add New Employee'}
+            <DialogTitle className="text-xl">
+              {selectedEmployee ? translations.employees.editEmployee : translations.employees.addEmployee}
             </DialogTitle>
           </DialogHeader>
           <EmployeeForm
@@ -156,7 +157,7 @@ function EmployeesPageContent() {
 
 export default function EmployeesPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className="p-8 text-center">{translations.common.loading}</div>}>
       <EmployeesPageContent />
     </Suspense>
   );

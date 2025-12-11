@@ -6,45 +6,48 @@ import { useAppStore } from '@/store';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { User, Sprout, Users, Map, ArrowRight, Plus } from 'lucide-react';
+import { translations } from '@/lib/translations';
 
 export default function HomePage() {
   const farmers = useAppStore((state) => state.farmers);
   const plantations = useAppStore((state) => state.plantations);
   const employees = useAppStore((state) => state.employees);
 
+  const totalArea = plantations.reduce((sum, p) => sum + Number(p.area), 0);
+
   const stats = [
     {
-      title: 'Farmers',
+      title: translations.home.totalFarmers,
       value: farmers.length,
       icon: User,
       href: '/farmers',
-      description: 'Registered farmers',
+      description: 'agriculteurs enregistrés',
       color: 'text-blue-600',
     },
     {
-      title: 'Plantations',
+      title: translations.home.totalPlantations,
       value: plantations.length,
       icon: Sprout,
       href: '/plantations',
-      description: 'Active plantations',
+      description: 'plantations actives',
       color: 'text-green-600',
     },
     {
-      title: 'Employees',
+      title: translations.home.totalEmployees,
       value: employees.length,
       icon: Users,
       href: '/employees',
-      description: 'Active employees',
+      description: 'employés actifs',
       color: 'text-purple-600',
     },
   ];
 
   return (
     <div className="space-y-8">
-      <div className="space-y-2">
-        <h1 className="text-4xl font-bold tracking-tight">Welcome to IdAgri</h1>
+      <div className="space-y-3">
+        <h1 className="text-4xl font-bold tracking-tight">{translations.home.title}</h1>
         <p className="text-lg text-muted-foreground">
-          Manage your farmers, plantations, and employees all in one place
+          {translations.home.subtitle}
         </p>
       </div>
 
@@ -62,7 +65,7 @@ export default function HomePage() {
                 <p className="text-xs text-muted-foreground mt-1">{stat.description}</p>
                 <Link href={stat.href}>
                   <Button variant="ghost" size="sm" className="mt-4 w-full">
-                    View All
+                    {translations.common.viewDetails}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
@@ -77,33 +80,33 @@ export default function HomePage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Plus className="h-5 w-5" />
-              Quick Actions
+              {translations.home.quickActions}
             </CardTitle>
-            <CardDescription>Common tasks to get you started</CardDescription>
+            <CardDescription>Actions courantes pour commencer</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-2">
+          <CardContent className="space-y-3">
             <Link href="/farmers?action=add">
-              <Button variant="outline" className="w-full justify-start">
+              <Button variant="outline" className="w-full justify-start h-11">
                 <User className="mr-2 h-4 w-4" />
-                Add New Farmer
+                {translations.home.addFarmer}
               </Button>
             </Link>
             <Link href="/plantations?action=add">
-              <Button variant="outline" className="w-full justify-start">
+              <Button variant="outline" className="w-full justify-start h-11">
                 <Sprout className="mr-2 h-4 w-4" />
-                Add New Plantation
+                {translations.home.addPlantation}
               </Button>
             </Link>
             <Link href="/employees?action=add">
-              <Button variant="outline" className="w-full justify-start">
+              <Button variant="outline" className="w-full justify-start h-11">
                 <Users className="mr-2 h-4 w-4" />
-                Add New Employee
+                {translations.home.addEmployee}
               </Button>
             </Link>
             <Link href="/map">
-              <Button variant="outline" className="w-full justify-start">
+              <Button variant="outline" className="w-full justify-start h-11">
                 <Map className="mr-2 h-4 w-4" />
-                View Plantation Map
+                {translations.home.viewMap}
               </Button>
             </Link>
           </CardContent>
@@ -113,35 +116,27 @@ export default function HomePage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Map className="h-5 w-5" />
-              Features
+              {translations.home.features}
             </CardTitle>
-            <CardDescription>What you can do with IdAgri</CardDescription>
+            <CardDescription>Ce que vous pouvez faire avec IdAgri</CardDescription>
           </CardHeader>
           <CardContent>
-            <ul className="space-y-2 text-sm">
-              <li className="flex items-start gap-2">
-                <div className="mt-0.5 h-4 w-4 text-primary">✓</div>
-                <span>Register and manage farmers with photos</span>
+            <ul className="space-y-3 text-sm">
+              <li className="flex items-start gap-3">
+                <div className="mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-xs">✓</div>
+                <span>{translations.home.featureManageFarmersDesc}</span>
               </li>
-              <li className="flex items-start gap-2">
-                <div className="mt-0.5 h-4 w-4 text-primary">✓</div>
-                <span>Track plantations with GPS coordinates and polygon boundaries</span>
+              <li className="flex items-start gap-3">
+                <div className="mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-xs">✓</div>
+                <span>{translations.home.featureTrackPlantationsDesc}</span>
               </li>
-              <li className="flex items-start gap-2">
-                <div className="mt-0.5 h-4 w-4 text-primary">✓</div>
-                <span>Manage employees and assign them to plantations</span>
+              <li className="flex items-start gap-3">
+                <div className="mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-xs">✓</div>
+                <span>{translations.home.featureEmployeesDesc}</span>
               </li>
-              <li className="flex items-start gap-2">
-                <div className="mt-0.5 h-4 w-4 text-primary">✓</div>
-                <span>Generate QR codes for quick farmer identification</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <div className="mt-0.5 h-4 w-4 text-primary">✓</div>
-                <span>View interactive maps with plantation locations</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <div className="mt-0.5 h-4 w-4 text-primary">✓</div>
-                <span>Filter and search by city and other criteria</span>
+              <li className="flex items-start gap-3">
+                <div className="mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-xs">✓</div>
+                <span>{translations.home.featureInteractiveMapDesc}</span>
               </li>
             </ul>
           </CardContent>

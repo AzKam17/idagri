@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAppStore } from '@/store';
+import { translations } from '@/lib/translations';
 
 import { Employee } from '@/types';
 import { localStorageService } from '@/lib/localStorage';
@@ -88,21 +89,21 @@ export function EmployeeForm({ employee, onSuccess }: EmployeeFormProps) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <User className="h-5 w-5" />
-          {employee ? 'Edit Employee' : 'Add New Employee'}
+          {employee ? translations.employees.editEmployee : translations.employees.addEmployee}
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-7">
           {/* Name Fields */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               <Label htmlFor="firstName" className="flex items-center gap-2">
                 <User className="h-4 w-4" />
-                First Name *
+                {translations.employees.firstName} *
               </Label>
               <Input
                 id="firstName"
-                {...register('firstName', { required: 'First name is required' })}
+                {...register('firstName', { required: `${translations.employees.firstName} est requis` })}
                 disabled={isSubmitting}
                 className={cn(isSubmitting && 'bg-muted cursor-not-allowed')}
               />
@@ -111,14 +112,14 @@ export function EmployeeForm({ employee, onSuccess }: EmployeeFormProps) {
               )}
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               <Label htmlFor="lastName" className="flex items-center gap-2">
                 <User className="h-4 w-4" />
-                Last Name *
+                {translations.employees.lastName} *
               </Label>
               <Input
                 id="lastName"
-                {...register('lastName', { required: 'Last name is required' })}
+                {...register('lastName', { required: `${translations.employees.lastName} est requis` })}
                 disabled={isSubmitting}
                 className={cn(isSubmitting && 'bg-muted cursor-not-allowed')}
               />
@@ -129,14 +130,14 @@ export function EmployeeForm({ employee, onSuccess }: EmployeeFormProps) {
           </div>
 
           {/* Position */}
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             <Label htmlFor="position" className="flex items-center gap-2">
               <Briefcase className="h-4 w-4" />
-              Position *
+              {translations.employees.position} *
             </Label>
             <Input
               id="position"
-              {...register('position', { required: 'Position is required' })}
+              {...register('position', { required: `${translations.employees.position} est requis` })}
               disabled={isSubmitting}
               className={cn(isSubmitting && 'bg-muted cursor-not-allowed')}
             />
@@ -146,14 +147,14 @@ export function EmployeeForm({ employee, onSuccess }: EmployeeFormProps) {
           </div>
 
           {/* City */}
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             <Label htmlFor="city" className="flex items-center gap-2">
               <MapPin className="h-4 w-4" />
-              City *
+              {translations.employees.city} *
             </Label>
             <Input
               id="city"
-              {...register('city', { required: 'City is required' })}
+              {...register('city', { required: `${translations.employees.city} est requise` })}
               disabled={isSubmitting}
               className={cn(isSubmitting && 'bg-muted cursor-not-allowed')}
             />
@@ -167,12 +168,12 @@ export function EmployeeForm({ employee, onSuccess }: EmployeeFormProps) {
             {isSubmitting ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                {employee ? 'Updating...' : 'Creating...'}
+                {employee ? 'Mise à jour...' : 'Création...'}
               </>
             ) : (
               <>
                 <Save className="h-4 w-4 mr-2" />
-                {employee ? 'Update Employee' : 'Create Employee'}
+                {employee ? 'Mettre à jour' : 'Créer'}
               </>
             )}
           </Button>

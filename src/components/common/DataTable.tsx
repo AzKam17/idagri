@@ -12,6 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import { translations } from '@/lib/translations';
 
 export interface Column<T> {
   header: string;
@@ -103,9 +104,11 @@ export function DataTable<T>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center text-muted-foreground"
+                  className="h-32 text-center text-muted-foreground"
                 >
-                  No data available
+                  <div className="flex flex-col items-center gap-2">
+                    <p className="text-base">{translations.common.noData}</p>
+                  </div>
                 </TableCell>
               </TableRow>
             ) : (
@@ -134,8 +137,8 @@ export function DataTable<T>({
       {pagination && (
         <div className="flex items-center justify-between px-2">
           <div className="flex items-center gap-2">
-            <p className="text-sm text-muted-foreground">
-              Page {pagination.page} of {totalPages} ({pagination.total} total)
+            <p className="text-sm font-medium text-muted-foreground">
+              Page {pagination.page} sur {totalPages} ({pagination.total} au total)
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -144,6 +147,7 @@ export function DataTable<T>({
               size="icon"
               onClick={() => pagination.onPageChange(1)}
               disabled={!canPreviousPage}
+              title="Première page"
             >
               <ChevronsLeft className="h-4 w-4" />
             </Button>
@@ -152,6 +156,7 @@ export function DataTable<T>({
               size="icon"
               onClick={() => pagination.onPageChange(pagination.page - 1)}
               disabled={!canPreviousPage}
+              title="Page précédente"
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
@@ -160,6 +165,7 @@ export function DataTable<T>({
               size="icon"
               onClick={() => pagination.onPageChange(pagination.page + 1)}
               disabled={!canNextPage}
+              title="Page suivante"
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
@@ -168,6 +174,7 @@ export function DataTable<T>({
               size="icon"
               onClick={() => pagination.onPageChange(totalPages)}
               disabled={!canNextPage}
+              title="Dernière page"
             >
               <ChevronsRight className="h-4 w-4" />
             </Button>

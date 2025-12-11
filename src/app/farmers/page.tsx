@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { User, Plus, Eye, Trash2, Edit, QrCode } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
+import { translations } from '@/lib/translations';
 
 function FarmersPageContent() {
   const searchParams = useSearchParams();
@@ -33,7 +34,7 @@ function FarmersPageContent() {
   const paginatedFarmers = farmers.slice((page - 1) * pageSize, page * pageSize);
 
   const handleDelete = (farmer: Farmer) => {
-    if (confirm(`Are you sure you want to delete ${farmer.firstName} ${farmer.lastName}?`)) {
+    if (confirm(`Êtes-vous sûr de vouloir supprimer ${farmer.firstName} ${farmer.lastName} ?`)) {
       localStorageService.deleteFarmer(farmer.id);
       deleteFarmer(farmer.id);
     }
@@ -46,41 +47,41 @@ function FarmersPageContent() {
 
   const columns: Column<Farmer>[] = [
     {
-      header: 'Photo',
+      header: translations.farmers.photo,
       icon: <User className="h-4 w-4" />,
       cell: (farmer) => (
         farmer.photo ? (
-          <img src={farmer.photo} alt={farmer.firstName} className="h-10 w-10 rounded-full object-cover" />
+          <img src={farmer.photo} alt={farmer.firstName} className="h-12 w-12 rounded-full object-cover shadow-sm" />
         ) : (
-          <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center">
-            <User className="h-5 w-5 text-muted-foreground" />
+          <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center shadow-sm">
+            <User className="h-6 w-6 text-muted-foreground" />
           </div>
         )
       ),
     },
     {
-      header: 'Name',
+      header: 'Nom',
       icon: <User className="h-4 w-4" />,
       cell: (farmer) => `${farmer.firstName} ${farmer.lastName}`,
     },
     {
-      header: 'Profession',
+      header: translations.farmers.profession,
       accessorKey: 'profession',
     },
     {
-      header: 'City',
+      header: translations.farmers.city,
       accessorKey: 'city',
     },
     {
-      header: 'Employees',
+      header: 'Employés',
       cell: (farmer) => farmer.numberOfEmployees,
     },
     {
-      header: 'Plantations',
+      header: translations.farmers.plantations,
       cell: (farmer) => getPlantationsByFarmer(farmer.id).length,
     },
     {
-      header: 'Actions',
+      header: translations.common.actions,
       cell: (farmer) => (
         <div className="flex gap-2">
           <Button
@@ -127,62 +128,62 @@ function FarmersPageContent() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <Button variant="outline" onClick={() => setViewMode('list')}>
-            ← Back to List
+            ← {translations.common.back}
           </Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="md:col-span-2">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <User className="h-5 w-5" />
-                Farmer Details
+              <CardTitle className="flex items-center gap-3">
+                <User className="h-6 w-6" />
+                {translations.farmers.farmerDetails}
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-start gap-4">
+            <CardContent className="space-y-6">
+              <div className="flex items-start gap-6">
                 {selectedFarmer.photo ? (
                   <img
                     src={selectedFarmer.photo}
                     alt={selectedFarmer.firstName}
-                    className="h-24 w-24 rounded-full object-cover border-2"
+                    className="h-28 w-28 rounded-full object-cover shadow-lg"
                   />
                 ) : (
-                  <div className="h-24 w-24 rounded-full bg-muted flex items-center justify-center">
-                    <User className="h-12 w-12 text-muted-foreground" />
+                  <div className="h-28 w-28 rounded-full bg-muted flex items-center justify-center shadow-lg">
+                    <User className="h-14 w-14 text-muted-foreground" />
                   </div>
                 )}
                 <div className="space-y-2">
-                  <h2 className="text-2xl font-bold">
+                  <h2 className="text-3xl font-bold">
                     {selectedFarmer.firstName} {selectedFarmer.lastName}
                   </h2>
-                  <p className="text-muted-foreground">{selectedFarmer.profession}</p>
+                  <p className="text-lg text-muted-foreground">{selectedFarmer.profession}</p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 pt-4 border-t">
+              <div className="grid grid-cols-2 gap-6 pt-6 border-t">
                 <div>
-                  <p className="text-sm text-muted-foreground">City</p>
-                  <p className="font-medium">{selectedFarmer.city}</p>
+                  <p className="text-sm font-medium text-muted-foreground mb-1">{translations.farmers.city}</p>
+                  <p className="text-lg font-semibold">{selectedFarmer.city}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Number of Employees</p>
-                  <p className="font-medium">{selectedFarmer.numberOfEmployees}</p>
+                  <p className="text-sm font-medium text-muted-foreground mb-1">{translations.farmers.numberOfEmployees}</p>
+                  <p className="text-lg font-semibold">{selectedFarmer.numberOfEmployees}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Plantations</p>
-                  <p className="font-medium">{plantations.length}</p>
+                  <p className="text-sm font-medium text-muted-foreground mb-1">{translations.farmers.plantations}</p>
+                  <p className="text-lg font-semibold">{plantations.length}</p>
                 </div>
               </div>
 
               {plantations.length > 0 && (
-                <div className="pt-4 border-t">
-                  <h3 className="font-semibold mb-2">Plantations</h3>
-                  <ul className="space-y-2">
+                <div className="pt-6 border-t">
+                  <h3 className="font-semibold text-lg mb-3">{translations.farmers.plantations}</h3>
+                  <ul className="space-y-3">
                     {plantations.map(p => (
-                      <li key={p.id} className="flex justify-between text-sm">
-                        <span>{p.name}</span>
-                        <span className="text-muted-foreground">{p.area} ha</span>
+                      <li key={p.id} className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
+                        <span className="font-medium">{p.name}</span>
+                        <span className="text-muted-foreground">{Number(p.area).toFixed(2)} {translations.units.hectares}</span>
                       </li>
                     ))}
                   </ul>
@@ -195,13 +196,13 @@ function FarmersPageContent() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <QrCode className="h-5 w-5" />
-                QR Code
+                {translations.farmers.qrCode}
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col items-center gap-4">
-              <QRCodeSVG value={farmerUrl} size={200} level="H" />
-              <p className="text-xs text-center text-muted-foreground">
-                Scan to view farmer profile
+            <CardContent className="flex flex-col items-center gap-4 py-6">
+              <QRCodeSVG value={farmerUrl} size={220} level="H" />
+              <p className="text-sm text-center text-muted-foreground">
+                {translations.farmers.qrCodeDesc}
               </p>
             </CardContent>
           </Card>
@@ -213,16 +214,16 @@ function FarmersPageContent() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
+        <div className="space-y-1">
+          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
             <User className="h-8 w-8" />
-            Farmers
+            {translations.farmers.title}
           </h1>
-          <p className="text-muted-foreground">Manage and view all registered farmers</p>
+          <p className="text-muted-foreground">Gérer et consulter tous les agriculteurs enregistrés</p>
         </div>
-        <Button onClick={() => { setSelectedFarmer(null); setIsAddDialogOpen(true); }}>
-          <Plus className="h-4 w-4 mr-2" />
-          Add Farmer
+        <Button onClick={() => { setSelectedFarmer(null); setIsAddDialogOpen(true); }} size="lg">
+          <Plus className="h-5 w-5 mr-2" />
+          {translations.farmers.addFarmer}
         </Button>
       </div>
 
@@ -241,7 +242,7 @@ function FarmersPageContent() {
       <Dialog open={isAddDialogOpen} onOpenChange={(open) => { setIsAddDialogOpen(open); if (!open) setSelectedFarmer(null); }}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{selectedFarmer ? 'Edit Farmer' : 'Add New Farmer'}</DialogTitle>
+            <DialogTitle className="text-xl">{selectedFarmer ? translations.farmers.editFarmer : translations.farmers.addFarmer}</DialogTitle>
           </DialogHeader>
           <FarmerForm
             farmer={selectedFarmer || undefined}
@@ -258,7 +259,7 @@ function FarmersPageContent() {
 
 export default function FarmersPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className="p-8 text-center">{translations.common.loading}</div>}>
       <FarmersPageContent />
     </Suspense>
   );

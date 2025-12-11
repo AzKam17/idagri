@@ -5,13 +5,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { User, Sprout, Map, Users, Home } from 'lucide-react';
+import { translations } from '@/lib/translations';
 
 const navItems = [
-  { href: '/', label: 'Home', icon: Home },
-  { href: '/farmers', label: 'Farmers', icon: User },
-  { href: '/plantations', label: 'Plantations', icon: Sprout },
-  { href: '/employees', label: 'Employees', icon: Users },
-  { href: '/map', label: 'Map', icon: Map },
+  { href: '/', label: translations.nav.home, icon: Home },
+  { href: '/farmers', label: translations.nav.farmers, icon: User },
+  { href: '/plantations', label: translations.nav.plantations, icon: Sprout },
+  { href: '/employees', label: translations.nav.employees, icon: Users },
+  { href: '/map', label: translations.nav.map, icon: Map },
 ];
 
 export function Navigation() {

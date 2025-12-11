@@ -3,7 +3,7 @@
 import React, { useState, Suspense } from 'react';
 import { useAppStore } from '@/store';
 import { useSearchParams } from 'next/navigation';
-
+import { translations } from '@/lib/translations';
 
 import { Plantation } from '@/types';
 import { localStorageService } from '@/lib/localStorage';
@@ -37,7 +37,7 @@ function PlantationsPageContent() {
   );
 
   const handleDelete = (plantation: Plantation) => {
-    if (confirm(`Are you sure you want to delete ${plantation.name}?`)) {
+    if (confirm(`${translations.plantations.confirmDelete}`)) {
       localStorageService.deletePlantation(plantation.id);
       deletePlantation(plantation.id);
     }
@@ -45,38 +45,38 @@ function PlantationsPageContent() {
 
   const getFarmerName = (farmerId: string) => {
     const farmer = farmers.find(f => f.id === farmerId);
-    return farmer ? `${farmer.firstName} ${farmer.lastName}` : 'Unknown';
+    return farmer ? `${farmer.firstName} ${farmer.lastName}` : 'Inconnu';
   };
 
   const columns: Column<Plantation>[] = [
     {
-      header: 'Name',
+      header: translations.plantations.name,
       icon: <Sprout className="h-4 w-4" />,
       accessorKey: 'name',
     },
     {
-      header: 'Farmer',
+      header: translations.plantations.farmer,
       cell: (plantation) => getFarmerName(plantation.farmerId),
     },
     {
-      header: 'Crops',
+      header: translations.plantations.crops,
       cell: (plantation) => plantation.crops.join(', '),
     },
     {
-      header: 'Area (ha)',
+      header: `${translations.plantations.area} (${translations.units.hectares})`,
       accessorKey: 'area',
     },
     {
-      header: 'City',
+      header: translations.plantations.city,
       icon: <MapPin className="h-4 w-4" />,
       accessorKey: 'city',
     },
     {
-      header: 'Location',
+      header: translations.plantations.location,
       cell: (plantation) => `${Number(plantation.latitude).toFixed(4)}, ${Number(plantation.longitude).toFixed(4)}`,
     },
     {
-      header: 'Actions',
+      header: translations.common.actions,
       cell: (plantation) => (
         <div className="flex gap-2">
           <Button
@@ -110,21 +110,22 @@ function PlantationsPageContent() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
-            <Sprout className="h-8 w-8" />
-            Plantations
+        <div className="space-y-1">
+          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
+            <Sprout className="h-9 w-9" />
+            {translations.plantations.title}
           </h1>
-          <p className="text-muted-foreground">Manage and view all plantations</p>
+          <p className="text-muted-foreground">Gérer et consulter toutes les plantations</p>
         </div>
         <Button
           onClick={() => {
             setSelectedPlantation(null);
             setIsAddDialogOpen(true);
           }}
+          size="lg"
         >
-          <Plus className="h-4 w-4 mr-2" />
-          Add Plantation
+          <Plus className="h-5 w-5 mr-2" />
+          {translations.plantations.addPlantation}
         </Button>
       </div>
 
@@ -132,11 +133,11 @@ function PlantationsPageContent() {
         <div className="flex-1">
           <Label htmlFor="cityFilter" className="flex items-center gap-2 mb-2">
             <Search className="h-4 w-4" />
-            Filter by City
+            {translations.plantations.filterByCity}
           </Label>
           <Input
             id="cityFilter"
-            placeholder="Enter city name..."
+            placeholder="Entrez le nom de la ville..."
             value={cityFilter}
             onChange={(e) => {
               setCityFilter(e.target.value);
@@ -147,7 +148,7 @@ function PlantationsPageContent() {
         {cityFilter && (
           <div className="flex items-end">
             <Button variant="outline" onClick={() => setCityFilter('')}>
-              Clear Filter
+              Effacer
             </Button>
           </div>
         )}
@@ -155,7 +156,7 @@ function PlantationsPageContent() {
 
       {cityFilter && (
         <p className="text-sm text-muted-foreground">
-          Showing {filteredPlantations.length} plantation(s) in cities matching "{cityFilter}"
+          Affichage de {filteredPlantations.length} plantation(s) correspondant à "{cityFilter}"
         </p>
       )}
 
@@ -180,8 +181,8 @@ function PlantationsPageContent() {
       >
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>
-              {selectedPlantation ? 'Edit Plantation' : 'Add New Plantation'}
+            <DialogTitle className="text-xl">
+              {selectedPlantation ? translations.plantations.editPlantation : translations.plantations.addPlantation}
             </DialogTitle>
           </DialogHeader>
           <PlantationForm
@@ -199,7 +200,7 @@ function PlantationsPageContent() {
 
 export default function PlantationsPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className="p-8 text-center">{translations.common.loading}</div>}>
       <PlantationsPageContent />
     </Suspense>
   );
