@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { useRecoilValue } from 'recoil';
-import { plantationsState } from '@/atoms/plantations';
-import { farmersState } from '@/atoms/farmers';
+import { useAppStore } from '@/store';
+
+
 import { PlantationWithFarmer } from '@/types';
 import { PlantationMap } from '@/components/common/PlantationMap';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,8 +18,8 @@ const PlantationMapDynamic = dynamic(
 );
 
 export default function MapPage() {
-  const plantations = useRecoilValue(plantationsState);
-  const farmers = useRecoilValue(farmersState);
+  const plantations = useAppStore((state) => state.plantations);
+  const farmers = useAppStore((state) => state.farmers);
   const [cityFilter, setCityFilter] = useState('');
   const [selectedPlantation, setSelectedPlantation] = useState<PlantationWithFarmer | null>(null);
 

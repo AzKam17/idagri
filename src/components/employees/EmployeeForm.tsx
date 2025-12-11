@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useSetRecoilState } from 'recoil';
-import { employeesState } from '@/atoms/employees';
+import { useAppStore } from '@/store';
+
 import { Employee } from '@/types';
 import { localStorageService } from '@/lib/localStorage';
 import { Button } from '@/components/ui/button';
@@ -27,7 +27,8 @@ interface EmployeeFormProps {
 
 export function EmployeeForm({ employee, onSuccess }: EmployeeFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const setEmployees = useSetRecoilState(employeesState);
+  const addEmployee = useAppStore((state) => state.addEmployee);
+  const updateEmployee = useAppStore((state) => state.updateEmployee);
 
   const {
     register,
@@ -61,9 +62,7 @@ export function EmployeeForm({ employee, onSuccess }: EmployeeFormProps) {
         };
 
         localStorageService.updateEmployee(employee.id, updatedEmployee);
-        setEmployees(prev =>
-          prev.map(e => (e.id === employee.id ? updatedEmployee : e))
-        );
+        updateEmployee(employee.id, updatedEmployee);
       } else {
         const newEmployee: Employee = {
           id: crypto.randomUUID(),
@@ -74,7 +73,7 @@ export function EmployeeForm({ employee, onSuccess }: EmployeeFormProps) {
         };
 
         localStorageService.addEmployee(newEmployee);
-        setEmployees(prev => [...prev, newEmployee]);
+        addEmployee(newEmployee);
         reset();
       }
 

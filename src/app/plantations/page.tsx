@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, Suspense } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useAppStore } from '@/store';
 import { useSearchParams } from 'next/navigation';
-import { plantationsState } from '@/atoms/plantations';
-import { farmersState } from '@/atoms/farmers';
+
+
 import { Plantation } from '@/types';
 import { localStorageService } from '@/lib/localStorage';
 import { DataTable, Column } from '@/components/common/DataTable';
@@ -17,9 +17,9 @@ import { Sprout, Plus, Edit, Trash2, MapPin, Search } from 'lucide-react';
 
 function PlantationsPageContent() {
   const searchParams = useSearchParams();
-  const plantations = useRecoilValue(plantationsState);
-  const farmers = useRecoilValue(farmersState);
-  const setPlantations = useSetRecoilState(plantationsState);
+  const plantations = useAppStore((state) => state.plantations);
+  const farmers = useAppStore((state) => state.farmers);
+  const deletePlantation = useAppStore((state) => state.deletePlantation);
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(searchParams.get('action') === 'add');
   const [selectedPlantation, setSelectedPlantation] = useState<Plantation | null>(null);
@@ -39,7 +39,7 @@ function PlantationsPageContent() {
   const handleDelete = (plantation: Plantation) => {
     if (confirm(`Are you sure you want to delete ${plantation.name}?`)) {
       localStorageService.deletePlantation(plantation.id);
-      setPlantations(prev => prev.filter(p => p.id !== plantation.id));
+      deletePlantation(plantation.id);
     }
   };
 

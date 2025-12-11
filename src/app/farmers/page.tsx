@@ -1,10 +1,8 @@
 'use client';
 
 import React, { useState, Suspense } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { farmersState } from '@/atoms/farmers';
-import { plantationsByFarmerSelector } from '@/atoms/plantations';
+import { useSearchParams } from 'next/navigation';
+import { useAppStore } from '@/store';
 import { Farmer } from '@/types';
 import { localStorageService } from '@/lib/localStorage';
 import { DataTable, Column } from '@/components/common/DataTable';
@@ -17,10 +15,14 @@ import { QRCodeSVG } from 'qrcode.react';
 
 function FarmersPageContent() {
   const searchParams = useSearchParams();
-  const router = useRouter();
-  const farmers = useRecoilValue(farmersState);
-  const setFarmers = useSetRecoilState(farmersState);
-  const getPlantationsByFarmer = useRecoilValue(plantationsByFarmerSelector);
+  const farmers = useAppStore((state) => state.farmers);
+  const plantations = useAppStore((state) => state.plantations);
+  const deleteFarmer = useAppStore((state) => state.deleteFarmer);
+  const updateFarmer = useAppStore((state) => state.updateFarmer);
+  const addFarmer = useAppStore((state) => state.addFarmer);
+
+  const getPlantationsByFarmer = (farmerId: string) =>
+    plantations.filter((p) => p.farmerId === farmerId);
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(searchParams.get('action') === 'add');
   const [selectedFarmer, setSelectedFarmer] = useState<Farmer | null>(null);
@@ -33,7 +35,7 @@ function FarmersPageContent() {
   const handleDelete = (farmer: Farmer) => {
     if (confirm(`Are you sure you want to delete ${farmer.firstName} ${farmer.lastName}?`)) {
       localStorageService.deleteFarmer(farmer.id);
-      setFarmers(prev => prev.filter(f => f.id !== farmer.id));
+      deleteFarmer(farmer.id);
     }
   };
 

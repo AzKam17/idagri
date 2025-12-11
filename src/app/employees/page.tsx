@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, Suspense } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useAppStore } from '@/store';
 import { useSearchParams } from 'next/navigation';
-import { employeesState } from '@/atoms/employees';
-import { plantationsState } from '@/atoms/plantations';
+
+
 import { Employee } from '@/types';
 import { localStorageService } from '@/lib/localStorage';
 import { DataTable, Column } from '@/components/common/DataTable';
@@ -15,9 +15,9 @@ import { Users, Plus, Edit, Trash2, MapPin, Briefcase } from 'lucide-react';
 
 function EmployeesPageContent() {
   const searchParams = useSearchParams();
-  const employees = useRecoilValue(employeesState);
-  const plantations = useRecoilValue(plantationsState);
-  const setEmployees = useSetRecoilState(employeesState);
+  const employees = useAppStore((state) => state.employees);
+  const plantations = useAppStore((state) => state.plantations);
+  const deleteEmployee = useAppStore((state) => state.deleteEmployee);
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(searchParams.get('action') === 'add');
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
@@ -29,7 +29,7 @@ function EmployeesPageContent() {
   const handleDelete = (employee: Employee) => {
     if (confirm(`Are you sure you want to delete ${employee.firstName} ${employee.lastName}?`)) {
       localStorageService.deleteEmployee(employee.id);
-      setEmployees(prev => prev.filter(e => e.id !== employee.id));
+      deleteEmployee(employee.id);
     }
   };
 

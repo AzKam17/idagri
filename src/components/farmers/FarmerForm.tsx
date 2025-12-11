@@ -2,8 +2,8 @@
 
 import React, { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { useSetRecoilState } from 'recoil';
-import { farmersState } from '@/atoms/farmers';
+import { useAppStore } from '@/store';
+
 import { Farmer } from '@/types';
 import { localStorageService } from '@/lib/localStorage';
 import { Button } from '@/components/ui/button';
@@ -30,7 +30,8 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [photo, setPhoto] = useState<string | undefined>(farmer?.photo);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const setFarmers = useSetRecoilState(farmersState);
+  const addFarmer = useAppStore((state) => state.addFarmer);
+  const updateFarmer = useAppStore((state) => state.updateFarmer);
 
   const {
     register,
@@ -78,7 +79,7 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
         };
 
         localStorageService.updateFarmer(farmer.id, updatedFarmer);
-        setFarmers(prev => prev.map(f => (f.id === farmer.id ? updatedFarmer : f)));
+        updateFarmer(farmer.id, updatedFarmer);
       } else {
         // Create new farmer
         const newFarmer: Farmer = {
@@ -90,7 +91,7 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
         };
 
         localStorageService.addFarmer(newFarmer);
-        setFarmers(prev => [...prev, newFarmer]);
+        addFarmer(newFarmer);
         reset();
         setPhoto(undefined);
       }

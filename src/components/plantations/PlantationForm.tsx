@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { farmersState } from '@/atoms/farmers';
-import { plantationsState } from '@/atoms/plantations';
-import { employeesState } from '@/atoms/employees';
+import { useAppStore } from '@/store';
+
+
+
 import { Plantation } from '@/types';
 import { localStorageService } from '@/lib/localStorage';
 import { Button } from '@/components/ui/button';
@@ -56,9 +56,10 @@ export function PlantationForm({ plantation, onSuccess }: PlantationFormProps) {
   );
   const [isDrawingMode, setIsDrawingMode] = useState(false);
 
-  const farmers = useRecoilValue(farmersState);
-  const employees = useRecoilValue(employeesState);
-  const setPlantations = useSetRecoilState(plantationsState);
+  const farmers = useAppStore((state) => state.farmers);
+  const employees = useAppStore((state) => state.employees);
+  const addPlantation = useAppStore((state) => state.addPlantation);
+  const updatePlantation = useAppStore((state) => state.updatePlantation);
 
   const {
     register,
@@ -121,9 +122,7 @@ export function PlantationForm({ plantation, onSuccess }: PlantationFormProps) {
         };
 
         localStorageService.updatePlantation(plantation.id, updatedPlantation);
-        setPlantations(prev =>
-          prev.map(p => (p.id === plantation.id ? updatedPlantation : p))
-        );
+        updatePlantation(plantation.id, updatedPlantation);
       } else {
         const newPlantation: Plantation = {
           id: crypto.randomUUID(),
@@ -141,7 +140,7 @@ export function PlantationForm({ plantation, onSuccess }: PlantationFormProps) {
         };
 
         localStorageService.addPlantation(newPlantation);
-        setPlantations(prev => [...prev, newPlantation]);
+        addPlantation(newPlantation);
         reset();
         setPolygonPoints([]);
       }

@@ -2,18 +2,15 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { useRecoilValue } from 'recoil';
-import { farmersState } from '@/atoms/farmers';
-import { plantationsState } from '@/atoms/plantations';
-import { employeesState } from '@/atoms/employees';
+import { useAppStore } from '@/store';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { User, Sprout, Users, Map, ArrowRight, Plus } from 'lucide-react';
 
 export default function HomePage() {
-  const farmers = useRecoilValue(farmersState);
-  const plantations = useRecoilValue(plantationsState);
-  const employees = useRecoilValue(employeesState);
+  const farmers = useAppStore((state) => state.farmers);
+  const plantations = useAppStore((state) => state.plantations);
+  const employees = useAppStore((state) => state.employees);
 
   const stats = [
     {
