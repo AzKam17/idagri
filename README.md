@@ -52,7 +52,7 @@ A comprehensive web application for managing farmers, plantations, and employees
 - **UI Library**: React 18
 - **Styling**: Tailwind CSS 4
 - **UI Components**: shadcn/ui (Radix UI primitives)
-- **State Management**: Recoil
+- **State Management**: Zustand
 - **Form Handling**: React Hook Form
 - **Data Fetching**: TanStack Query (React Query)
 - **Mapping**: Leaflet
@@ -84,13 +84,11 @@ src/
 │   │   └── EmployeeForm.tsx
 │   ├── layout/              # Layout components
 │   │   ├── Navigation.tsx   # Main navigation
-│   │   ├── Providers.tsx    # Recoil & React Query providers
+│   │   ├── Providers.tsx    # React Query provider
 │   │   └── DataLoader.tsx   # LocalStorage data loader
 │   └── ui/                  # shadcn/ui components
-├── atoms/                   # Recoil state atoms
-│   ├── farmers.ts
-│   ├── plantations.ts
-│   └── employees.ts
+├── store/                   # Zustand store
+│   └── index.ts
 ├── hooks/                   # Custom React hooks
 │   └── useLocalStorage.ts
 ├── lib/                     # Utility functions
