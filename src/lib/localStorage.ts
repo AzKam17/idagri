@@ -1,9 +1,14 @@
-import { Farmer, Plantation, Employee } from '@/types';
+import { Farmer, Plantation, Employee, Planter, Weighing, Credit, Payment, TransferOrder } from '@/types';
 
 const STORAGE_KEYS = {
   FARMERS: 'idagri_farmers',
   PLANTATIONS: 'idagri_plantations',
   EMPLOYEES: 'idagri_employees',
+  PLANTERS: 'idagri_planters',
+  WEIGHINGS: 'idagri_weighings',
+  CREDITS: 'idagri_credits',
+  PAYMENTS: 'idagri_payments',
+  TRANSFER_ORDERS: 'idagri_transfer_orders',
 };
 
 export const localStorageService = {
@@ -104,5 +109,65 @@ export const localStorageService = {
     const employees = localStorageService.getEmployees();
     const filtered = employees.filter(e => e.id !== id);
     localStorageService.saveEmployees(filtered);
+  },
+
+  // Planters
+  getPlanters: (): Planter[] => {
+    if (typeof window === 'undefined') return [];
+    const data = localStorage.getItem(STORAGE_KEYS.PLANTERS);
+    return data ? JSON.parse(data) : [];
+  },
+
+  savePlanters: (planters: Planter[]): void => {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem(STORAGE_KEYS.PLANTERS, JSON.stringify(planters));
+  },
+
+  // Weighings
+  getWeighings: (): Weighing[] => {
+    if (typeof window === 'undefined') return [];
+    const data = localStorage.getItem(STORAGE_KEYS.WEIGHINGS);
+    return data ? JSON.parse(data) : [];
+  },
+
+  saveWeighings: (weighings: Weighing[]): void => {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem(STORAGE_KEYS.WEIGHINGS, JSON.stringify(weighings));
+  },
+
+  // Credits
+  getCredits: (): Credit[] => {
+    if (typeof window === 'undefined') return [];
+    const data = localStorage.getItem(STORAGE_KEYS.CREDITS);
+    return data ? JSON.parse(data) : [];
+  },
+
+  saveCredits: (credits: Credit[]): void => {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem(STORAGE_KEYS.CREDITS, JSON.stringify(credits));
+  },
+
+  // Payments
+  getPayments: (): Payment[] => {
+    if (typeof window === 'undefined') return [];
+    const data = localStorage.getItem(STORAGE_KEYS.PAYMENTS);
+    return data ? JSON.parse(data) : [];
+  },
+
+  savePayments: (payments: Payment[]): void => {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem(STORAGE_KEYS.PAYMENTS, JSON.stringify(payments));
+  },
+
+  // Transfer Orders
+  getTransferOrders: (): TransferOrder[] => {
+    if (typeof window === 'undefined') return [];
+    const data = localStorage.getItem(STORAGE_KEYS.TRANSFER_ORDERS);
+    return data ? JSON.parse(data) : [];
+  },
+
+  saveTransferOrders: (transferOrders: TransferOrder[]): void => {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem(STORAGE_KEYS.TRANSFER_ORDERS, JSON.stringify(transferOrders));
   },
 };

@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { User, Sprout, Map, Users, Home } from 'lucide-react';
+import { User, Sprout, Map, Users, Home, UserCheck, Scale, CreditCard, Wallet } from 'lucide-react';
 import { translations } from '@/lib/translations';
 
 const navItems = [
@@ -12,6 +12,9 @@ const navItems = [
   { href: '/farmers', label: translations.nav.farmers, icon: User },
   { href: '/plantations', label: translations.nav.plantations, icon: Sprout },
   { href: '/employees', label: translations.nav.employees, icon: Users },
+  { href: '/planters', label: 'Planteurs', icon: UserCheck },
+  { href: '/weighings', label: 'Pesées', icon: Scale },
+  { href: '/credits', label: 'Créances', icon: CreditCard },
   { href: '/map', label: translations.nav.map, icon: Map },
 ];
 
