@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Sprout, Plus, Edit, Trash2, MapPin, Search } from 'lucide-react';
+import { Sprout, Plus, Edit, Trash2, MapPin, Search, User, Briefcase } from 'lucide-react';
 
 function PlantationsPageContent() {
   const searchParams = useSearchParams();
@@ -23,6 +23,7 @@ function PlantationsPageContent() {
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(searchParams.get('action') === 'add');
   const [selectedPlantation, setSelectedPlantation] = useState<Plantation | null>(null);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [cityFilter, setCityFilter] = useState('');
   const [page, setPage] = useState(1);
   const pageSize = 10;
@@ -46,6 +47,11 @@ function PlantationsPageContent() {
   const getFarmerName = (farmerId: string) => {
     const farmer = farmers.find(f => f.id === farmerId);
     return farmer ? `${farmer.firstName} ${farmer.lastName}` : 'Inconnu';
+  };
+
+  const handleRowClick = (plantation: Plantation) => {
+    setSelectedPlantation(plantation);
+    setIsPanelOpen(true);
   };
 
   const columns: Column<Plantation>[] = [
@@ -75,56 +81,39 @@ function PlantationsPageContent() {
       header: translations.plantations.location,
       cell: (plantation) => `${Number(plantation.latitude).toFixed(4)}, ${Number(plantation.longitude).toFixed(4)}`,
     },
-    {
-      header: translations.common.actions,
-      cell: (plantation) => (
-        <div className="flex gap-2">
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={(e) => {
-              e.stopPropagation();
-              setSelectedPlantation(plantation);
-              setIsAddDialogOpen(true);
-            }}
-          >
-            <Edit className="h-4 w-4" />
-          </Button>
-          <Button
-            size="sm"
-            variant="destructive"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDelete(plantation);
-            }}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        </div>
-      ),
-    },
   ];
 
   const cities = [...new Set(plantations.map(p => p.city))].sort();
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
-            <Sprout className="h-9 w-9" />
-            {translations.plantations.title}
-          </h1>
-          <p className="text-muted-foreground">Gérer et consulter toutes les plantations</p>
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div style={{
+            width: '40px',
+            height: '40px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '8px',
+            background: 'color-mix(in srgb, #00a540 10%, transparent)'
+          }}>
+            <Sprout style={{ width: '20px', height: '20px', color: '#00a540' }} />
+          </div>
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight">
+              {translations.plantations.title}
+            </h1>
+            <p className="text-muted-foreground text-sm">Gérer et consulter toutes les plantations</p>
+          </div>
         </div>
         <Button
           onClick={() => {
             setSelectedPlantation(null);
             setIsAddDialogOpen(true);
           }}
-          size="lg"
         >
-          <Plus className="h-5 w-5 mr-2" />
+          <Plus className="h-4 w-4" />
           {translations.plantations.addPlantation}
         </Button>
       </div>
@@ -163,6 +152,7 @@ function PlantationsPageContent() {
       <DataTable
         data={paginatedPlantations}
         columns={columns}
+        onRowClick={handleRowClick}
         pagination={{
           page,
           pageSize,
@@ -194,6 +184,111 @@ function PlantationsPageContent() {
           />
         </DialogContent>
       </Dialog>
+
+      {/* Right Panel */}
+      {isPanelOpen && selectedPlantation && (
+        <>
+          <div
+            className="fixed inset-0 bg-black/20 z-[998] fade-in-overlay"
+            onClick={() => setIsPanelOpen(false)}
+          />
+          <div className="w-[31%] fixed bottom-0 right-0 top-0 z-[999] min-h-screen bg-white shadow-2xl slide-in-left">
+            <div className="flex h-screen flex-col border-l border-neutral-200 bg-white">
+              {/* Close Button */}
+              <div className="absolute left-6 top-10 h-12 w-12">
+                <button
+                  onClick={() => setIsPanelOpen(false)}
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-neutral-900 cursor-pointer hover:opacity-70 transition-all duration-300"
+                >
+                  <svg className="h-6 w-6 text-neutral-900" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M23.6666 2.6835L21.3166 0.333496L11.9999 9.65016L2.68325 0.333496L0.333252 2.6835L9.64992 12.0002L0.333252 21.3168L2.68325 23.6668L11.9999 14.3502L21.3166 23.6668L23.6666 21.3168L14.3499 12.0002L23.6666 2.6835Z" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="flex-grow overflow-y-auto pt-28 pb-8">
+                {/* Plantation Name */}
+                <div className="flex flex-col items-center justify-center gap-5 mb-10">
+                  <div className="h-24 w-24 rounded-full bg-green-100 flex items-center justify-center shadow-lg">
+                    <Sprout className="h-12 w-12 text-green-600" />
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-semibold leading-10 text-neutral-900">
+                      {selectedPlantation.name}
+                    </div>
+                    <div className="text-base text-neutral-600 mt-1">{selectedPlantation.crops.join(', ')}</div>
+                  </div>
+                </div>
+
+                {/* Details */}
+                <div className="flex flex-col gap-6 border-t border-b border-neutral-200 px-6 py-10">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <User className="h-4 w-4 text-neutral-600" />
+                      <div className="text-base font-medium text-neutral-600">Agriculteur</div>
+                    </div>
+                    <div className="text-right text-base text-neutral-900">{getFarmerName(selectedPlantation.farmerId)}</div>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Briefcase className="h-4 w-4 text-neutral-600" />
+                      <div className="text-base font-medium text-neutral-600">Surface</div>
+                    </div>
+                    <div className="text-right text-base text-neutral-900">{selectedPlantation.area} {translations.units.hectares}</div>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <MapPin className="h-4 w-4 text-neutral-600" />
+                      <div className="text-base font-medium text-neutral-600">Ville</div>
+                    </div>
+                    <div className="text-right text-base text-neutral-900">{selectedPlantation.city}</div>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <MapPin className="h-4 w-4 text-neutral-600" />
+                      <div className="text-base font-medium text-neutral-600">Coordonnées</div>
+                    </div>
+                    <div className="text-right text-base text-neutral-900">
+                      {Number(selectedPlantation.latitude).toFixed(4)}, {Number(selectedPlantation.longitude).toFixed(4)}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="px-6 mt-8 flex flex-col gap-3">
+                  <Button
+                    onClick={() => {
+                      setIsAddDialogOpen(true);
+                      setIsPanelOpen(false);
+                    }}
+                    className="w-full"
+                  >
+                    <Edit className="h-4 w-4" />
+                    Modifier
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={() => {
+                      if (confirm(`${translations.plantations.confirmDelete}`)) {
+                        handleDelete(selectedPlantation);
+                        setIsPanelOpen(false);
+                      }
+                    }}
+                    className="w-full"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Supprimer
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

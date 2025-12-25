@@ -3,9 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useAppStore } from '@/store';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { User, Sprout, Users, Map, ArrowRight, Plus } from 'lucide-react';
+import { User, Sprout, Users, Map, ArrowRight, Plus, TrendingUp } from 'lucide-react';
 import { translations } from '@/lib/translations';
 
 export default function HomePage() {
@@ -22,7 +20,7 @@ export default function HomePage() {
       icon: User,
       href: '/farmers',
       description: 'agriculteurs enregistrés',
-      color: 'text-blue-600',
+      iconColor: '#00a540',
     },
     {
       title: translations.home.totalPlantations,
@@ -30,7 +28,7 @@ export default function HomePage() {
       icon: Sprout,
       href: '/plantations',
       description: 'plantations actives',
-      color: 'text-green-600',
+      iconColor: '#00a540',
     },
     {
       title: translations.home.totalEmployees,
@@ -38,109 +36,131 @@ export default function HomePage() {
       icon: Users,
       href: '/employees',
       description: 'employés actifs',
-      color: 'text-purple-600',
+      iconColor: '#00a540',
     },
   ];
 
+  const features = [
+    { text: translations.home.featureManageFarmersDesc },
+    { text: translations.home.featureTrackPlantationsDesc },
+    { text: translations.home.featureEmployeesDesc },
+    { text: translations.home.featureInteractiveMapDesc },
+  ];
+
   return (
-    <div className="space-y-8">
-      <div className="space-y-3">
-        <h1 className="text-4xl font-bold tracking-tight">{translations.home.title}</h1>
-        <p className="text-lg text-muted-foreground">
-          {translations.home.subtitle}
-        </p>
+    <div className="space-y-xl animate-fade-in">
+      {/* Header Section */}
+      <div className="section-header">
+        <h1 className="section-title">{translations.home.title}</h1>
+        <p className="section-subtitle">{translations.home.subtitle}</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Stats Grid */}
+      <div className="stats-grid">
         {stats.map(stat => {
           const Icon = stat.icon;
           return (
-            <Card key={stat.title} className="hover:shadow-lg transition-shadow">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-                <Icon className={`h-5 w-5 ${stat.color}`} />
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold">{stat.value}</div>
-                <p className="text-xs text-muted-foreground mt-1">{stat.description}</p>
-                <Link href={stat.href}>
-                  <Button variant="ghost" size="sm" className="mt-4 w-full">
-                    {translations.common.viewDetails}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+            <div key={stat.title} className="stat-card">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div className="stat-label">{stat.title}</div>
+                <Icon style={{ width: '20px', height: '20px', color: stat.iconColor }} />
+              </div>
+              <div className="stat-value">{stat.value}</div>
+              <div className="stat-description">{stat.description}</div>
+              <Link href={stat.href} style={{ textDecoration: 'none' }}>
+                <div className="view-details-button" style={{ marginTop: '16px' }}>
+                  <span>Voir les détails</span>
+                  <ArrowRight style={{ width: '16px', height: '16px' }} />
+                </div>
+              </Link>
+            </div>
           );
         })}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Plus className="h-5 w-5" />
-              {translations.home.quickActions}
-            </CardTitle>
-            <CardDescription>Actions courantes pour commencer</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <Link href="/farmers?action=add">
-              <Button variant="outline" className="w-full justify-start h-11">
-                <User className="mr-2 h-4 w-4" />
-                {translations.home.addFarmer}
-              </Button>
-            </Link>
-            <Link href="/plantations?action=add">
-              <Button variant="outline" className="w-full justify-start h-11">
-                <Sprout className="mr-2 h-4 w-4" />
-                {translations.home.addPlantation}
-              </Button>
-            </Link>
-            <Link href="/employees?action=add">
-              <Button variant="outline" className="w-full justify-start h-11">
-                <Users className="mr-2 h-4 w-4" />
-                {translations.home.addEmployee}
-              </Button>
-            </Link>
-            <Link href="/map">
-              <Button variant="outline" className="w-full justify-start h-11">
-                <Map className="mr-2 h-4 w-4" />
-                {translations.home.viewMap}
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
+      {/* Content Grid */}
+      <div className="content-grid">
+        {/* Quick Actions Card */}
+        <div className="fluent-card">
+          <div className="card-header">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
+              <div style={{
+                width: '32px',
+                height: '32px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: '8px',
+                background: 'color-mix(in srgb, #00a540 10%, transparent)'
+              }}>
+                <Plus style={{ width: '18px', height: '18px', color: '#00a540' }} />
+              </div>
+              <div>
+                <div className="card-title">{translations.home.quickActions}</div>
+                <div className="card-description">Actions courantes pour commencer</div>
+              </div>
+            </div>
+          </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Map className="h-5 w-5" />
-              {translations.home.features}
-            </CardTitle>
-            <CardDescription>Ce que vous pouvez faire avec IdAgri</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-start gap-3">
-                <div className="mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-xs">✓</div>
-                <span>{translations.home.featureManageFarmersDesc}</span>
+          <div className="space-y-sm">
+            <Link href="/farmers?action=add" style={{ textDecoration: 'none' }}>
+              <div className="action-button">
+                <User style={{ width: '16px', height: '16px' }} />
+                <span>{translations.home.addFarmer}</span>
+              </div>
+            </Link>
+            <Link href="/plantations?action=add" style={{ textDecoration: 'none' }}>
+              <div className="action-button">
+                <Sprout style={{ width: '16px', height: '16px' }} />
+                <span>{translations.home.addPlantation}</span>
+              </div>
+            </Link>
+            <Link href="/employees?action=add" style={{ textDecoration: 'none' }}>
+              <div className="action-button">
+                <Users style={{ width: '16px', height: '16px' }} />
+                <span>{translations.home.addEmployee}</span>
+              </div>
+            </Link>
+            <Link href="/map" style={{ textDecoration: 'none' }}>
+              <div className="action-button-primary action-button">
+                <Map style={{ width: '16px', height: '16px' }} />
+                <span>{translations.home.viewMap}</span>
+              </div>
+            </Link>
+          </div>
+        </div>
+
+        {/* Features Card */}
+        <div className="fluent-card">
+          <div className="card-header">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
+              <div style={{
+                width: '32px',
+                height: '32px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: '8px',
+                background: 'color-mix(in srgb, #00a540 10%, transparent)'
+              }}>
+                <TrendingUp style={{ width: '18px', height: '18px', color: '#00a540' }} />
+              </div>
+              <div>
+                <div className="card-title">{translations.home.features}</div>
+                <div className="card-description">Ce que vous pouvez faire avec IdAgri</div>
+              </div>
+            </div>
+          </div>
+
+          <ul className="feature-list">
+            {features.map((feature, index) => (
+              <li key={index} className="feature-item">
+                <div className="feature-icon">✓</div>
+                <div className="feature-text">{feature.text}</div>
               </li>
-              <li className="flex items-start gap-3">
-                <div className="mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-xs">✓</div>
-                <span>{translations.home.featureTrackPlantationsDesc}</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <div className="mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-xs">✓</div>
-                <span>{translations.home.featureEmployeesDesc}</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <div className="mt-0.5 h-5 w-5 flex items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-xs">✓</div>
-                <span>{translations.home.featureInteractiveMapDesc}</span>
-              </li>
-            </ul>
-          </CardContent>
-        </Card>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );

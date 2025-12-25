@@ -14,7 +14,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Search, Plus, Edit, Trash2, CreditCard, Scale, FileText } from 'lucide-react';
+import { Search, Plus, Edit, Trash2, CreditCard, Scale, FileText, User, MapPin } from 'lucide-react';
 import PlanterForm from '@/components/planters/PlanterForm';
 import { Planter } from '@/types';
 
@@ -23,6 +23,8 @@ export default function PlantersPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingPlanter, setEditingPlanter] = useState<Planter | null>(null);
+  const [selectedPlanter, setSelectedPlanter] = useState<Planter | null>(null);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const filteredPlanters = planters.filter((planter) =>
     `${planter.firstName} ${planter.lastName} ${planter.code} ${planter.village}`
@@ -46,28 +48,45 @@ export default function PlantersPage() {
     return { totalProduction, pendingCredits };
   };
 
+  const handleRowClick = (planter: Planter) => {
+    setSelectedPlanter(planter);
+    setIsPanelOpen(true);
+  };
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Planteurs</h1>
-          <p className="text-gray-600">Gérez les planteurs de caoutchouc</p>
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div style={{
+            width: '40px',
+            height: '40px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '8px',
+            background: 'color-mix(in srgb, #00a540 10%, transparent)'
+          }}>
+            <FileText style={{ width: '20px', height: '20px', color: '#00a540' }} />
+          </div>
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight">Planteurs</h1>
+            <p className="text-muted-foreground text-sm">Gérez les planteurs de caoutchouc</p>
+          </div>
         </div>
-        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="bg-black text-white hover:bg-black/90 rounded-lg shadow-md">
-              <Plus className="w-4 h-4 mr-2" />
-              Ajouter un Planteur
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>Ajouter un Planteur</DialogTitle>
-            </DialogHeader>
-            <PlanterForm onSuccess={() => setIsAddDialogOpen(false)} />
-          </DialogContent>
-        </Dialog>
+        <Button onClick={() => { setEditingPlanter(null); setIsAddDialogOpen(true); }}>
+          <Plus className="w-4 h-4" />
+          Ajouter un Planteur
+        </Button>
       </div>
+
+      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{editingPlanter ? 'Modifier le Planteur' : 'Ajouter un Planteur'}</DialogTitle>
+          </DialogHeader>
+          <PlanterForm planter={editingPlanter || undefined} onSuccess={() => { setIsAddDialogOpen(false); setEditingPlanter(null); }} />
+        </DialogContent>
+      </Dialog>
 
       <Card className="border-0 shadow-md rounded-xl">
         <CardHeader>
@@ -99,14 +118,13 @@ export default function PlantersPage() {
                     <TableHead>Taille Plantation (ha)</TableHead>
                     <TableHead>Production (tonnes)</TableHead>
                     <TableHead>Créances (FCFA)</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredPlanters.map((planter) => {
                     const stats = getPlanterStats(planter.id);
                     return (
-                      <TableRow key={planter.id}>
+                      <TableRow key={planter.id} onClick={() => handleRowClick(planter)} style={{ cursor: 'pointer' }}>
                         <TableCell className="font-medium">{planter.code}</TableCell>
                         <TableCell>
                           {planter.firstName} {planter.lastName}
@@ -116,39 +134,6 @@ export default function PlantersPage() {
                         <TableCell>{stats.totalProduction.toFixed(2)}</TableCell>
                         <TableCell className={stats.pendingCredits > 0 ? 'text-red-600 font-medium' : ''}>
                           {new Intl.NumberFormat('fr-FR').format(stats.pendingCredits)}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex justify-end gap-2">
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <Button
-                                  variant="outline"
-                                  size="sm"
-                                  className="rounded-lg shadow-sm"
-                                  onClick={() => setEditingPlanter(planter)}
-                                >
-                                  <Edit className="w-4 h-4" />
-                                </Button>
-                              </DialogTrigger>
-                              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-                                <DialogHeader>
-                                  <DialogTitle>Modifier le Planteur</DialogTitle>
-                                </DialogHeader>
-                                <PlanterForm
-                                  planter={editingPlanter}
-                                  onSuccess={() => setEditingPlanter(null)}
-                                />
-                              </DialogContent>
-                            </Dialog>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="rounded-lg shadow-sm"
-                              onClick={() => handleDelete(planter.id)}
-                            >
-                              <Trash2 className="w-4 h-4 text-red-600" />
-                            </Button>
-                          </div>
                         </TableCell>
                       </TableRow>
                     );
@@ -203,6 +188,112 @@ export default function PlantersPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Right Panel */}
+      {isPanelOpen && selectedPlanter && (
+        <>
+          <div
+            className="fixed inset-0 bg-black/20 z-[998] fade-in-overlay"
+            onClick={() => setIsPanelOpen(false)}
+          />
+          <div className="w-[31%] fixed bottom-0 right-0 top-0 z-[999] min-h-screen bg-white shadow-2xl slide-in-left">
+            <div className="flex h-screen flex-col border-l border-neutral-200 bg-white">
+              {/* Close Button */}
+              <div className="absolute left-6 top-10 h-12 w-12">
+                <button
+                  onClick={() => setIsPanelOpen(false)}
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-neutral-900 cursor-pointer hover:opacity-70 transition-all duration-300"
+                >
+                  <svg className="h-6 w-6 text-neutral-900" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M23.6666 2.6835L21.3166 0.333496L11.9999 9.65016L2.68325 0.333496L0.333252 2.6835L9.64992 12.0002L0.333252 21.3168L2.68325 23.6668L11.9999 14.3502L21.3166 23.6668L23.6666 21.3168L14.3499 12.0002L23.6666 2.6835Z" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="flex-grow overflow-y-auto pt-28 pb-8">
+                {/* Planter Name */}
+                <div className="flex flex-col items-center justify-center gap-5 mb-10">
+                  <div className="h-24 w-24 rounded-full bg-amber-100 flex items-center justify-center shadow-lg">
+                    <User className="h-12 w-12 text-amber-600" />
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-semibold leading-10 text-neutral-900">
+                      {selectedPlanter.firstName} {selectedPlanter.lastName}
+                    </div>
+                    <div className="text-base text-neutral-600 mt-1">Code: {selectedPlanter.code}</div>
+                  </div>
+                </div>
+
+                {/* Details */}
+                <div className="flex flex-col gap-6 border-t border-b border-neutral-200 px-6 py-10">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <MapPin className="h-4 w-4 text-neutral-600" />
+                      <div className="text-base font-medium text-neutral-600">Village</div>
+                    </div>
+                    <div className="text-right text-base text-neutral-900">{selectedPlanter.village}</div>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Scale className="h-4 w-4 text-neutral-600" />
+                      <div className="text-base font-medium text-neutral-600">Taille Plantation</div>
+                    </div>
+                    <div className="text-right text-base text-neutral-900">{selectedPlanter.plantationSize} ha</div>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Scale className="h-4 w-4 text-neutral-600" />
+                      <div className="text-base font-medium text-neutral-600">Production</div>
+                    </div>
+                    <div className="text-right text-base text-neutral-900">{getPlanterStats(selectedPlanter.id).totalProduction.toFixed(2)} tonnes</div>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <CreditCard className="h-4 w-4 text-neutral-600" />
+                      <div className="text-base font-medium text-neutral-600">Créances</div>
+                    </div>
+                    <div className={`text-right text-base ${getPlanterStats(selectedPlanter.id).pendingCredits > 0 ? 'text-red-600 font-semibold' : 'text-neutral-900'}`}>
+                      {new Intl.NumberFormat('fr-FR').format(getPlanterStats(selectedPlanter.id).pendingCredits)} FCFA
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="px-6 mt-8 flex flex-col gap-3">
+                  <Button
+                    onClick={() => {
+                      setEditingPlanter(selectedPlanter);
+                      setIsAddDialogOpen(true);
+                      setIsPanelOpen(false);
+                    }}
+                    className="w-full"
+                  >
+                    <Edit className="h-4 w-4" />
+                    Modifier
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={() => {
+                      if (confirm('Êtes-vous sûr de vouloir supprimer ce planteur ?')) {
+                        handleDelete(selectedPlanter.id);
+                        setIsPanelOpen(false);
+                      }
+                    }}
+                    className="w-full"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Supprimer
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

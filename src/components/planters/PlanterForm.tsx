@@ -2,9 +2,11 @@
 
 import { useForm } from 'react-hook-form';
 import { useAppStore } from '@/store';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import {
+  Button,
+  Input,
+  Label,
+} from '@fluentui/react-components';
 import { Planter } from '@/types';
 import { generatePlanterCode } from '@/lib/planterUtils';
 
@@ -85,10 +87,9 @@ export default function PlanterForm({ planter, onSuccess }: PlanterFormProps) {
           <Input
             id="firstName"
             {...register('firstName', { required: 'Le prénom est requis' })}
-            className="rounded-lg"
           />
           {errors.firstName && (
-            <p className="text-sm text-red-600">{errors.firstName.message}</p>
+            <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.firstName.message}</p>
           )}
         </div>
 
@@ -97,10 +98,9 @@ export default function PlanterForm({ planter, onSuccess }: PlanterFormProps) {
           <Input
             id="lastName"
             {...register('lastName', { required: 'Le nom est requis' })}
-            className="rounded-lg"
           />
           {errors.lastName && (
-            <p className="text-sm text-red-600">{errors.lastName.message}</p>
+            <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.lastName.message}</p>
           )}
         </div>
       </div>
@@ -110,10 +110,9 @@ export default function PlanterForm({ planter, onSuccess }: PlanterFormProps) {
         <Input
           id="village"
           {...register('village', { required: 'Le village est requis' })}
-          className="rounded-lg"
         />
         {errors.village && (
-          <p className="text-sm text-red-600">{errors.village.message}</p>
+          <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.village.message}</p>
         )}
       </div>
 
@@ -128,10 +127,9 @@ export default function PlanterForm({ planter, onSuccess }: PlanterFormProps) {
             valueAsNumber: true,
             min: { value: 0.01, message: 'La taille doit être supérieure à 0' },
           })}
-          className="rounded-lg"
         />
         {errors.plantationSize && (
-          <p className="text-sm text-red-600">{errors.plantationSize.message}</p>
+          <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.plantationSize.message}</p>
         )}
       </div>
 
@@ -146,11 +144,10 @@ export default function PlanterForm({ planter, onSuccess }: PlanterFormProps) {
               required: 'La latitude est requise',
               valueAsNumber: true,
             })}
-            className="rounded-lg"
             placeholder="Ex: 5.345678"
           />
           {errors.latitude && (
-            <p className="text-sm text-red-600">{errors.latitude.message}</p>
+            <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.latitude.message}</p>
           )}
         </div>
 
@@ -164,11 +161,10 @@ export default function PlanterForm({ planter, onSuccess }: PlanterFormProps) {
               required: 'La longitude est requise',
               valueAsNumber: true,
             })}
-            className="rounded-lg"
             placeholder="Ex: -3.456789"
           />
           {errors.longitude && (
-            <p className="text-sm text-red-600">{errors.longitude.message}</p>
+            <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.longitude.message}</p>
           )}
         </div>
       </div>
@@ -179,20 +175,18 @@ export default function PlanterForm({ planter, onSuccess }: PlanterFormProps) {
           id="phone"
           type="tel"
           {...register('phone')}
-          className="rounded-lg"
           placeholder="Ex: +225 01 02 03 04 05"
         />
       </div>
 
-      <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
-        <h3 className="font-medium">Informations Bancaires</h3>
+      <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }} className="space-y-4">
+        <h3 style={{ fontWeight: '500' }}>Informations Bancaires</h3>
 
         <div className="space-y-2">
           <Label htmlFor="bankName">Nom de la Banque</Label>
           <Input
             id="bankName"
             {...register('bankName')}
-            className="rounded-lg"
             placeholder="Ex: COOPEC BIANOUAN"
           />
         </div>
@@ -202,7 +196,6 @@ export default function PlanterForm({ planter, onSuccess }: PlanterFormProps) {
           <Input
             id="bankAccountNumber"
             {...register('bankAccountNumber')}
-            className="rounded-lg"
             placeholder="Ex: 203110003019"
           />
         </div>
@@ -211,13 +204,21 @@ export default function PlanterForm({ planter, onSuccess }: PlanterFormProps) {
       <div className="flex justify-end gap-4 pt-4">
         <Button
           type="button"
-          variant="outline"
+          appearance="outline"
           onClick={onSuccess}
-          className="rounded-lg"
         >
           Annuler
         </Button>
-        <Button type="submit" className="bg-black text-white hover:bg-black/90 rounded-lg shadow-md">
+        <Button
+          type="submit"
+          appearance="primary"
+          style={{
+            backgroundColor: '#00a540',
+            color: '#fff',
+            borderRadius: '8px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+          }}
+        >
           {planter ? 'Mettre à jour' : 'Ajouter'}
         </Button>
       </div>

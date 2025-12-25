@@ -3,9 +3,10 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils';
-import { User, Sprout, Map, Users, Home, UserCheck, Scale, CreditCard, Wallet } from 'lucide-react';
+import { User, Sprout, Map, Users, Home, UserCheck, Scale, CreditCard, Menu, X, ChevronRight } from 'lucide-react';
 import { translations } from '@/lib/translations';
+import { useAppStore } from '@/store';
+import './Navigation.css';
 
 const navItems = [
   { href: '/', label: translations.nav.home, icon: Home },
@@ -20,39 +21,92 @@ const navItems = [
 
 export function Navigation() {
   const pathname = usePathname();
+  const { isSidebarOpen, toggleSidebar } = useAppStore();
 
   return (
-    <nav className="border-b bg-background">
-      <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
+    <>
+      {/* Mobile Header with Hamburger */}
+      <div className="fixed top-0 left-0 right-0 h-16 bg-white z-50 lg:hidden" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}>
+        <div className="flex items-center justify-between h-full px-4">
+          <button
+            onClick={toggleSidebar}
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            aria-label="Toggle menu"
+          >
+            {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
           <div className="flex items-center gap-2">
-            <Sprout className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">IdAgri</span>
+            <Sprout className="h-5 w-5 text-green-600" />
+            <span className="text-lg font-bold">IdAgri</span>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="w-9" />
+        </div>
+      </div>
+
+      {/* Sidebar */}
+      <aside
+        className={`fixed top-0 left-0 h-full bg-white transition-transform duration-300 z-40 flex flex-col w-64 lg:translate-x-0 ${
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+        style={{ boxShadow: '2px 0 8px rgba(0,0,0,0.08)' }}
+      >
+        {/* Logo Section */}
+        <div className="h-16 flex items-center gap-2 px-6" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}>
+          <Sprout className="h-6 w-6 text-green-600" />
+          <span className="text-xl font-bold text-gray-900">IdAgri</span>
+        </div>
+
+        {/* Navigation Items */}
+        <nav className="flex-1 overflow-y-auto py-4">
+          <div className="main-list">
             {navItems.map(item => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
 
               return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    'flex items-center gap-2 px-4 py-2 rounded-md transition-colors',
-                    isActive
-                      ? 'bg-primary text-primary-foreground'
-                      : 'hover:bg-muted'
-                  )}
-                >
-                  <Icon className="h-4 w-4" />
-                  <span className="font-medium">{item.label}</span>
-                </Link>
+                <div key={item.href} className="main-item">
+                  <Link
+                    href={item.href}
+                    className={`nav-link ${isActive ? 'active' : ''}`}
+                    onClick={() => {
+                      if (window.innerWidth < 1024) {
+                        toggleSidebar();
+                      }
+                    }}
+                  >
+                    <span className="nav-icon">
+                      <Icon className="h-4 w-4" />
+                    </span>
+                    <span className="nav-label">{item.label}</span>
+                    {isActive && (
+                      <span className="nav-indicator"></span>
+                    )}
+                  </Link>
+                </div>
               );
             })}
           </div>
+        </nav>
+
+        {/* Toggle Button (Desktop) */}
+        <div className="hidden lg:block p-3" style={{ boxShadow: '0 -1px 3px rgba(0,0,0,0.08)' }}>
+          <button
+            onClick={toggleSidebar}
+            className="collapse-btn"
+          >
+            <Menu className="h-4 w-4" />
+            <span>Réduire</span>
+          </button>
         </div>
-      </div>
-    </nav>
+      </aside>
+
+      {/* Overlay for mobile */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
+          onClick={toggleSidebar}
+        />
+      )}
+    </>
   );
 }

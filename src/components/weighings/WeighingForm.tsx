@@ -2,16 +2,13 @@
 
 import { useForm } from 'react-hook-form';
 import { useAppStore } from '@/store';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+  Button,
+  Input,
+  Label,
+  Dropdown,
+  Option,
+} from '@fluentui/react-components';
 import { Weighing } from '@/types';
 import { getCurrentPeriod, calculateWeighingTotals } from '@/lib/planterUtils';
 import { useState, useEffect } from 'react';
@@ -139,24 +136,21 @@ export default function WeighingForm({ weighing, onSuccess }: WeighingFormProps)
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div className="space-y-2">
         <Label htmlFor="planterId">Planteur *</Label>
-        <Select
-          onValueChange={(value) => setValue('planterId', value)}
-          defaultValue={weighing?.planterId}
+        <Dropdown
+          placeholder="Sélectionner un planteur"
+          value={planters.find(p => p.id === watch('planterId')) ? `${planters.find(p => p.id === watch('planterId'))?.code} - ${planters.find(p => p.id === watch('planterId'))?.firstName} ${planters.find(p => p.id === watch('planterId'))?.lastName}` : ''}
+          onOptionSelect={(_, data) => setValue('planterId', data.optionValue as string)}
+          style={{ width: '100%' }}
         >
-          <SelectTrigger className="rounded-lg">
-            <SelectValue placeholder="Sélectionner un planteur" />
-          </SelectTrigger>
-          <SelectContent>
-            {planters.map((planter) => (
-              <SelectItem key={planter.id} value={planter.id}>
-                {planter.code} - {planter.firstName} {planter.lastName}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+          {planters.map((planter) => (
+            <Option key={planter.id} value={planter.id} text={`${planter.code} - ${planter.firstName} ${planter.lastName}`}>
+              {planter.code} - {planter.firstName} {planter.lastName}
+            </Option>
+          ))}
+        </Dropdown>
         <input type="hidden" {...register('planterId', { required: true })} />
         {errors.planterId && (
-          <p className="text-sm text-red-600">Le planteur est requis</p>
+          <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>Le planteur est requis</p>
         )}
       </div>
 
@@ -166,11 +160,10 @@ export default function WeighingForm({ weighing, onSuccess }: WeighingFormProps)
           <Input
             id="period"
             {...register('period', { required: 'La période est requise' })}
-            className="rounded-lg"
             placeholder="Ex: PA-06/2023-1"
           />
           {errors.period && (
-            <p className="text-sm text-red-600">{errors.period.message}</p>
+            <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.period.message}</p>
           )}
         </div>
 
@@ -180,16 +173,15 @@ export default function WeighingForm({ weighing, onSuccess }: WeighingFormProps)
             id="weighingDate"
             type="date"
             {...register('weighingDate', { required: 'La date est requise' })}
-            className="rounded-lg"
           />
           {errors.weighingDate && (
-            <p className="text-sm text-red-600">{errors.weighingDate.message}</p>
+            <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.weighingDate.message}</p>
           )}
         </div>
       </div>
 
-      <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
-        <h3 className="font-medium">Informations Pesée</h3>
+      <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }} className="space-y-4">
+        <h3 style={{ fontWeight: '500' }}>Informations Pesée</h3>
 
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
@@ -203,10 +195,9 @@ export default function WeighingForm({ weighing, onSuccess }: WeighingFormProps)
                 valueAsNumber: true,
                 min: { value: 0, message: 'Le poids doit être positif' },
               })}
-              className="rounded-lg"
             />
             {errors.grossWeight && (
-              <p className="text-sm text-red-600">{errors.grossWeight.message}</p>
+              <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.grossWeight.message}</p>
             )}
           </div>
 
@@ -221,24 +212,23 @@ export default function WeighingForm({ weighing, onSuccess }: WeighingFormProps)
                 valueAsNumber: true,
                 min: { value: 0, message: 'La tare doit être positive' },
               })}
-              className="rounded-lg"
             />
             {errors.tare && (
-              <p className="text-sm text-red-600">{errors.tare.message}</p>
+              <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.tare.message}</p>
             )}
           </div>
         </div>
 
-        <div className="p-3 bg-white rounded-lg border">
-          <div className="text-sm text-gray-600">Poids Net Calculé</div>
-          <div className="text-2xl font-bold">
+        <div style={{ padding: '12px', backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e5e5e5' }}>
+          <div style={{ fontSize: '14px', color: '#6b7280' }}>Poids Net Calculé</div>
+          <div style={{ fontSize: '24px', fontWeight: 'bold' }}>
             {calculatedValues.netWeight.toFixed(2)} kg
           </div>
         </div>
       </div>
 
-      <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
-        <h3 className="font-medium">Tarification</h3>
+      <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }} className="space-y-4">
+        <h3 style={{ fontWeight: '500' }}>Tarification</h3>
 
         <div className="grid grid-cols-3 gap-4">
           <div className="space-y-2">
@@ -252,10 +242,9 @@ export default function WeighingForm({ weighing, onSuccess }: WeighingFormProps)
                 valueAsNumber: true,
                 min: { value: 0, message: 'Le prix doit être positif' },
               })}
-              className="rounded-lg"
             />
             {errors.price && (
-              <p className="text-sm text-red-600">{errors.price.message}</p>
+              <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.price.message}</p>
             )}
           </div>
 
@@ -270,10 +259,9 @@ export default function WeighingForm({ weighing, onSuccess }: WeighingFormProps)
                 valueAsNumber: true,
                 min: { value: 0, message: 'Le coût doit être positif' },
               })}
-              className="rounded-lg"
             />
             {errors.transportCostPerKg && (
-              <p className="text-sm text-red-600">{errors.transportCostPerKg.message}</p>
+              <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.transportCostPerKg.message}</p>
             )}
           </div>
 
@@ -288,47 +276,46 @@ export default function WeighingForm({ weighing, onSuccess }: WeighingFormProps)
                 valueAsNumber: true,
                 min: { value: 0, message: 'Le taux doit être positif' },
               })}
-              className="rounded-lg"
             />
             {errors.taxRate && (
-              <p className="text-sm text-red-600">{errors.taxRate.message}</p>
+              <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.taxRate.message}</p>
             )}
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <div className="p-3 bg-white rounded-lg border">
-            <div className="text-xs text-gray-600">Montant Brut</div>
-            <div className="text-lg font-bold">
+          <div style={{ padding: '12px', backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e5e5e5' }}>
+            <div style={{ fontSize: '12px', color: '#6b7280' }}>Montant Brut</div>
+            <div style={{ fontSize: '18px', fontWeight: 'bold' }}>
               {new Intl.NumberFormat('fr-FR').format(calculatedValues.grossAmount)} FCFA
             </div>
           </div>
 
-          <div className="p-3 bg-white rounded-lg border">
-            <div className="text-xs text-gray-600">Coût Transport</div>
-            <div className="text-lg font-bold text-orange-600">
+          <div style={{ padding: '12px', backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e5e5e5' }}>
+            <div style={{ fontSize: '12px', color: '#6b7280' }}>Coût Transport</div>
+            <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#ea580c' }}>
               -{new Intl.NumberFormat('fr-FR').format(calculatedValues.transportCost)} FCFA
             </div>
           </div>
 
-          <div className="p-3 bg-white rounded-lg border">
-            <div className="text-xs text-gray-600">Impôt ({taxRate}%)</div>
-            <div className="text-lg font-bold text-orange-600">
+          <div style={{ padding: '12px', backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e5e5e5' }}>
+            <div style={{ fontSize: '12px', color: '#6b7280' }}>Impôt ({taxRate}%)</div>
+            <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#ea580c' }}>
               -{new Intl.NumberFormat('fr-FR').format(calculatedValues.taxAmount)} FCFA
             </div>
           </div>
 
-          <div className="p-3 bg-green-50 rounded-lg border border-green-200">
-            <div className="text-xs text-green-700">Net à Payer</div>
-            <div className="text-lg font-bold text-green-700">
+          <div style={{ padding: '12px', backgroundColor: '#f0fdf4', borderRadius: '8px', border: '1px solid #86efac' }}>
+            <div style={{ fontSize: '12px', color: '#15803d' }}>Net à Payer</div>
+            <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#15803d' }}>
               {new Intl.NumberFormat('fr-FR').format(calculatedValues.netAmount)} FCFA
             </div>
           </div>
         </div>
       </div>
 
-      <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
-        <h3 className="font-medium">Informations Transport</h3>
+      <div style={{ padding: '16px', backgroundColor: '#f9fafb', borderRadius: '8px' }} className="space-y-4">
+        <h3 style={{ fontWeight: '500' }}>Informations Transport</h3>
 
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
@@ -336,10 +323,9 @@ export default function WeighingForm({ weighing, onSuccess }: WeighingFormProps)
             <Input
               id="driverName"
               {...register('driverName', { required: 'Le nom du chauffeur est requis' })}
-              className="rounded-lg"
             />
             {errors.driverName && (
-              <p className="text-sm text-red-600">{errors.driverName.message}</p>
+              <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.driverName.message}</p>
             )}
           </div>
 
@@ -350,11 +336,10 @@ export default function WeighingForm({ weighing, onSuccess }: WeighingFormProps)
               {...register('vehicleRegistration', {
                 required: 'L&apos;immatriculation est requise',
               })}
-              className="rounded-lg"
               placeholder="Ex: AB-1234-CD"
             />
             {errors.vehicleRegistration && (
-              <p className="text-sm text-red-600">{errors.vehicleRegistration.message}</p>
+              <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.vehicleRegistration.message}</p>
             )}
           </div>
         </div>
@@ -363,13 +348,21 @@ export default function WeighingForm({ weighing, onSuccess }: WeighingFormProps)
       <div className="flex justify-end gap-4 pt-4">
         <Button
           type="button"
-          variant="outline"
+          appearance="outline"
           onClick={onSuccess}
-          className="rounded-lg"
         >
           Annuler
         </Button>
-        <Button type="submit" className="bg-black text-white hover:bg-black/90 rounded-lg shadow-md">
+        <Button
+          type="submit"
+          appearance="primary"
+          style={{
+            backgroundColor: '#00a540',
+            color: '#fff',
+            borderRadius: '8px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+          }}
+        >
           {weighing ? 'Mettre à jour' : 'Enregistrer'}
         </Button>
       </div>

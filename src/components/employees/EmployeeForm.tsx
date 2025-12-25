@@ -7,12 +7,16 @@ import { translations } from '@/lib/translations';
 
 import { Employee } from '@/types';
 import { localStorageService } from '@/lib/localStorage';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { User, Briefcase, MapPin, Loader2, Save } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import {
+  Button,
+  Input,
+  Label,
+  Card,
+  CardHeader,
+  Body1,
+  Spinner
+} from '@fluentui/react-components';
+import { User, Briefcase, MapPin, Save } from 'lucide-react';
 
 interface EmployeeFormData {
   firstName: string;
@@ -85,19 +89,23 @@ export function EmployeeForm({ employee, onSuccess }: EmployeeFormProps) {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <User className="h-5 w-5" />
-          {employee ? translations.employees.editEmployee : translations.employees.addEmployee}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-7">
+    <Card style={{ padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', borderRadius: '8px' }}>
+      <CardHeader
+        header={
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <User className="h-5 w-5" />
+            <Body1 style={{ fontWeight: 'bold' }}>
+              {employee ? translations.employees.editEmployee : translations.employees.addEmployee}
+            </Body1>
+          </div>
+        }
+      />
+      <div>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-7" style={{ marginTop: '20px' }}>
           {/* Name Fields */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2.5">
-              <Label htmlFor="firstName" className="flex items-center gap-2">
+              <Label htmlFor="firstName" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <User className="h-4 w-4" />
                 {translations.employees.firstName} *
               </Label>
@@ -105,15 +113,14 @@ export function EmployeeForm({ employee, onSuccess }: EmployeeFormProps) {
                 id="firstName"
                 {...register('firstName', { required: `${translations.employees.firstName} est requis` })}
                 disabled={isSubmitting}
-                className={cn(isSubmitting && 'bg-muted cursor-not-allowed')}
               />
               {errors.firstName && (
-                <p className="text-sm text-destructive">{errors.firstName.message}</p>
+                <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.firstName.message}</p>
               )}
             </div>
 
             <div className="space-y-2.5">
-              <Label htmlFor="lastName" className="flex items-center gap-2">
+              <Label htmlFor="lastName" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <User className="h-4 w-4" />
                 {translations.employees.lastName} *
               </Label>
@@ -121,17 +128,16 @@ export function EmployeeForm({ employee, onSuccess }: EmployeeFormProps) {
                 id="lastName"
                 {...register('lastName', { required: `${translations.employees.lastName} est requis` })}
                 disabled={isSubmitting}
-                className={cn(isSubmitting && 'bg-muted cursor-not-allowed')}
               />
               {errors.lastName && (
-                <p className="text-sm text-destructive">{errors.lastName.message}</p>
+                <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.lastName.message}</p>
               )}
             </div>
           </div>
 
           {/* Position */}
           <div className="space-y-2.5">
-            <Label htmlFor="position" className="flex items-center gap-2">
+            <Label htmlFor="position" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Briefcase className="h-4 w-4" />
               {translations.employees.position} *
             </Label>
@@ -139,16 +145,15 @@ export function EmployeeForm({ employee, onSuccess }: EmployeeFormProps) {
               id="position"
               {...register('position', { required: `${translations.employees.position} est requis` })}
               disabled={isSubmitting}
-              className={cn(isSubmitting && 'bg-muted cursor-not-allowed')}
             />
             {errors.position && (
-              <p className="text-sm text-destructive">{errors.position.message}</p>
+              <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.position.message}</p>
             )}
           </div>
 
           {/* City */}
           <div className="space-y-2.5">
-            <Label htmlFor="city" className="flex items-center gap-2">
+            <Label htmlFor="city" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <MapPin className="h-4 w-4" />
               {translations.employees.city} *
             </Label>
@@ -156,29 +161,32 @@ export function EmployeeForm({ employee, onSuccess }: EmployeeFormProps) {
               id="city"
               {...register('city', { required: `${translations.employees.city} est requise` })}
               disabled={isSubmitting}
-              className={cn(isSubmitting && 'bg-muted cursor-not-allowed')}
             />
             {errors.city && (
-              <p className="text-sm text-destructive">{errors.city.message}</p>
+              <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.city.message}</p>
             )}
           </div>
 
           {/* Submit Button */}
-          <Button type="submit" disabled={isSubmitting} className="w-full">
-            {isSubmitting ? (
-              <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                {employee ? 'Mise à jour...' : 'Création...'}
-              </>
-            ) : (
-              <>
-                <Save className="h-4 w-4 mr-2" />
-                {employee ? 'Mettre à jour' : 'Créer'}
-              </>
-            )}
+          <Button
+            type="submit"
+            appearance="primary"
+            disabled={isSubmitting}
+            icon={isSubmitting ? <Spinner size="tiny" /> : <Save className="h-4 w-4" />}
+            style={{
+              width: '100%',
+              backgroundColor: '#00a540',
+              color: '#fff',
+              borderRadius: '8px'
+            }}
+          >
+            {isSubmitting
+              ? (employee ? 'Mise à jour...' : 'Création...')
+              : (employee ? 'Mettre à jour' : 'Créer')
+            }
           </Button>
         </form>
-      </CardContent>
+      </div>
     </Card>
   );
 }

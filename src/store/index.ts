@@ -11,6 +11,7 @@ interface AppState {
   credits: Credit[];
   payments: Payment[];
   transferOrders: TransferOrder[];
+  isSidebarOpen: boolean;
 
   setFarmers: (farmers: Farmer[]) => void;
   setPlantations: (plantations: Plantation[]) => void;
@@ -20,6 +21,8 @@ interface AppState {
   setCredits: (credits: Credit[]) => void;
   setPayments: (payments: Payment[]) => void;
   setTransferOrders: (transferOrders: TransferOrder[]) => void;
+  toggleSidebar: () => void;
+  setSidebarOpen: (open: boolean) => void;
 
   addFarmer: (farmer: Farmer) => void;
   updateFarmer: (id: string, farmer: Farmer) => void;
@@ -61,6 +64,7 @@ export const useAppStore = create<AppState>((set) => ({
   credits: [],
   payments: [],
   transferOrders: [],
+  isSidebarOpen: true,
 
   setFarmers: (farmers) => set({ farmers }),
   setPlantations: (plantations) => set({ plantations }),
@@ -70,6 +74,8 @@ export const useAppStore = create<AppState>((set) => ({
   setCredits: (credits) => set({ credits }),
   setPayments: (payments) => set({ payments }),
   setTransferOrders: (transferOrders) => set({ transferOrders }),
+  toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
+  setSidebarOpen: (open) => set({ isSidebarOpen: open }),
 
   addFarmer: (farmer) => set((state) => ({ farmers: [...state.farmers, farmer] })),
   updateFarmer: (id, farmer) => set((state) => ({

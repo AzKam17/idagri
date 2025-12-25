@@ -2,17 +2,14 @@
 
 import { useForm } from 'react-hook-form';
 import { useAppStore } from '@/store';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+  Button,
+  Input,
+  Label,
+  Textarea,
+  Dropdown,
+  Option,
+} from '@fluentui/react-components';
 import { Credit, CreditType } from '@/types';
 
 interface CreditFormProps {
@@ -81,45 +78,39 @@ export default function CreditForm({ credit, onSuccess }: CreditFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div className="space-y-2">
         <Label htmlFor="planterId">Planteur *</Label>
-        <Select
-          onValueChange={(value) => setValue('planterId', value)}
-          defaultValue={credit?.planterId}
+        <Dropdown
+          placeholder="Sélectionner un planteur"
+          value={planters.find(p => p.id === credit?.planterId) ? `${planters.find(p => p.id === credit?.planterId)?.code} - ${planters.find(p => p.id === credit?.planterId)?.firstName} ${planters.find(p => p.id === credit?.planterId)?.lastName}` : ''}
+          onOptionSelect={(_, data) => setValue('planterId', data.optionValue as string)}
+          style={{ width: '100%' }}
         >
-          <SelectTrigger className="rounded-lg">
-            <SelectValue placeholder="Sélectionner un planteur" />
-          </SelectTrigger>
-          <SelectContent>
-            {planters.map((planter) => (
-              <SelectItem key={planter.id} value={planter.id}>
-                {planter.code} - {planter.firstName} {planter.lastName}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+          {planters.map((planter) => (
+            <Option key={planter.id} value={planter.id} text={`${planter.code} - ${planter.firstName} ${planter.lastName}`}>
+              {planter.code} - {planter.firstName} {planter.lastName}
+            </Option>
+          ))}
+        </Dropdown>
         <input type="hidden" {...register('planterId', { required: true })} />
         {errors.planterId && (
-          <p className="text-sm text-red-600">Le planteur est requis</p>
+          <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>Le planteur est requis</p>
         )}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="type">Type de Créance *</Label>
-          <Select
-            onValueChange={(value) => setValue('type', value as CreditType)}
-            defaultValue={credit?.type || 'money'}
+          <Dropdown
+            placeholder="Sélectionner le type"
+            value={credit?.type === 'money' ? 'Argent' : credit?.type === 'tools' ? 'Outils' : ''}
+            onOptionSelect={(_, data) => setValue('type', data.optionValue as CreditType)}
+            style={{ width: '100%' }}
           >
-            <SelectTrigger className="rounded-lg">
-              <SelectValue placeholder="Sélectionner le type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="money">Argent</SelectItem>
-              <SelectItem value="tools">Outils</SelectItem>
-            </SelectContent>
-          </Select>
+            <Option value="money" text="Argent">Argent</Option>
+            <Option value="tools" text="Outils">Outils</Option>
+          </Dropdown>
           <input type="hidden" {...register('type', { required: true })} />
           {errors.type && (
-            <p className="text-sm text-red-600">Le type est requis</p>
+            <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>Le type est requis</p>
           )}
         </div>
 
@@ -129,10 +120,9 @@ export default function CreditForm({ credit, onSuccess }: CreditFormProps) {
             id="date"
             type="date"
             {...register('date', { required: 'La date est requise' })}
-            className="rounded-lg"
           />
           {errors.date && (
-            <p className="text-sm text-red-600">{errors.date.message}</p>
+            <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.date.message}</p>
           )}
         </div>
       </div>
@@ -148,11 +138,10 @@ export default function CreditForm({ credit, onSuccess }: CreditFormProps) {
             valueAsNumber: true,
             min: { value: 0, message: 'Le montant doit être positif' },
           })}
-          className="rounded-lg"
           placeholder="Ex: 50000"
         />
         {errors.amount && (
-          <p className="text-sm text-red-600">{errors.amount.message}</p>
+          <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.amount.message}</p>
         )}
       </div>
 
@@ -161,25 +150,32 @@ export default function CreditForm({ credit, onSuccess }: CreditFormProps) {
         <Textarea
           id="description"
           {...register('description', { required: 'La description est requise' })}
-          className="rounded-lg"
           placeholder="Ex: Avance sur salaire, Achat outils..."
           rows={3}
         />
         {errors.description && (
-          <p className="text-sm text-red-600">{errors.description.message}</p>
+          <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.description.message}</p>
         )}
       </div>
 
       <div className="flex justify-end gap-4 pt-4">
         <Button
           type="button"
-          variant="outline"
+          appearance="outline"
           onClick={onSuccess}
-          className="rounded-lg"
         >
           Annuler
         </Button>
-        <Button type="submit" className="bg-black text-white hover:bg-black/90 rounded-lg shadow-md">
+        <Button
+          type="submit"
+          appearance="primary"
+          style={{
+            backgroundColor: '#00a540',
+            color: '#fff',
+            borderRadius: '8px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+          }}
+        >
           {credit ? 'Mettre à jour' : 'Ajouter'}
         </Button>
       </div>

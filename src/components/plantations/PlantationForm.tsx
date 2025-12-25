@@ -7,29 +7,27 @@ import { translations } from '@/lib/translations';
 
 import { Plantation } from '@/types';
 import { localStorageService } from '@/lib/localStorage';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+  Button,
+  Input,
+  Label,
+  Card,
+  CardHeader,
+  Body1,
+  Spinner,
+  Checkbox,
+  Dropdown,
+  Option,
+} from '@fluentui/react-components';
 import {
   Sprout,
   MapPin,
   Maximize,
   User,
   Users,
-  Loader2,
   Save,
   Map as MapIcon,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { LatLngExpression } from 'leaflet';
 
 interface PlantationFormData {
@@ -151,18 +149,22 @@ export function PlantationForm({ plantation, onSuccess }: PlantationFormProps) {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Sprout className="h-5 w-5" />
-          {plantation ? translations.plantations.editPlantation : translations.plantations.addPlantation}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-7">
+    <Card style={{ padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', borderRadius: '8px' }}>
+      <CardHeader
+        header={
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Sprout className="h-5 w-5" />
+            <Body1 style={{ fontWeight: 'bold' }}>
+              {plantation ? translations.plantations.editPlantation : translations.plantations.addPlantation}
+            </Body1>
+          </div>
+        }
+      />
+      <div>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-7" style={{ marginTop: '20px' }}>
           {/* Plantation Name */}
           <div className="space-y-2.5">
-            <Label htmlFor="name" className="flex items-center gap-2">
+            <Label htmlFor="name" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Sprout className="h-4 w-4" />
               {translations.plantations.name} *
             </Label>
@@ -170,16 +172,15 @@ export function PlantationForm({ plantation, onSuccess }: PlantationFormProps) {
               id="name"
               {...register('name', { required: `${translations.plantations.name} est requis` })}
               disabled={isSubmitting}
-              className={cn(isSubmitting && 'bg-muted cursor-not-allowed')}
             />
             {errors.name && (
-              <p className="text-sm text-destructive">{errors.name.message}</p>
+              <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.name.message}</p>
             )}
           </div>
 
           {/* Farmer Selection */}
           <div className="space-y-2.5">
-            <Label htmlFor="farmerId" className="flex items-center gap-2">
+            <Label htmlFor="farmerId" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <User className="h-4 w-4" />
               {translations.plantations.farmer} *
             </Label>
@@ -188,34 +189,29 @@ export function PlantationForm({ plantation, onSuccess }: PlantationFormProps) {
               control={control}
               rules={{ required: `${translations.plantations.farmer} est requis` }}
               render={({ field }) => (
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
+                <Dropdown
+                  placeholder={translations.plantations.selectFarmer}
+                  value={farmers.find(f => f.id === field.value) ? `${farmers.find(f => f.id === field.value)?.firstName} ${farmers.find(f => f.id === field.value)?.lastName}` : ''}
+                  onOptionSelect={(_, data) => field.onChange(data.optionValue)}
                   disabled={isSubmitting}
+                  style={{ width: '100%' }}
                 >
-                  <SelectTrigger
-                    className={cn(isSubmitting && 'bg-muted cursor-not-allowed')}
-                  >
-                    <SelectValue placeholder={translations.plantations.selectFarmer} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {farmers.map(farmer => (
-                      <SelectItem key={farmer.id} value={farmer.id}>
-                        {farmer.firstName} {farmer.lastName}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  {farmers.map(farmer => (
+                    <Option key={farmer.id} value={farmer.id} text={`${farmer.firstName} ${farmer.lastName}`}>
+                      {farmer.firstName} {farmer.lastName}
+                    </Option>
+                  ))}
+                </Dropdown>
               )}
             />
             {errors.farmerId && (
-              <p className="text-sm text-destructive">{errors.farmerId.message}</p>
+              <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.farmerId.message}</p>
             )}
           </div>
 
           {/* Crops */}
           <div className="space-y-2.5">
-            <Label htmlFor="crops" className="flex items-center gap-2">
+            <Label htmlFor="crops" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Sprout className="h-4 w-4" />
               {translations.plantations.crops} *
             </Label>
@@ -224,18 +220,17 @@ export function PlantationForm({ plantation, onSuccess }: PlantationFormProps) {
               placeholder={translations.plantations.cropsPlaceholder}
               {...register('crops', { required: 'Au moins une culture est requise' })}
               disabled={isSubmitting}
-              className={cn(isSubmitting && 'bg-muted cursor-not-allowed')}
             />
-            <p className="text-sm text-muted-foreground">{translations.plantations.cropsDesc}</p>
+            <p style={{ fontSize: '14px', color: '#6b7280', marginTop: '4px' }}>{translations.plantations.cropsDesc}</p>
             {errors.crops && (
-              <p className="text-sm text-destructive">{errors.crops.message}</p>
+              <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.crops.message}</p>
             )}
           </div>
 
           {/* Area and City */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2.5">
-              <Label htmlFor="area" className="flex items-center gap-2">
+              <Label htmlFor="area" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Maximize className="h-4 w-4" />
                 {translations.plantations.area} (hectares) *
               </Label>
@@ -249,15 +244,14 @@ export function PlantationForm({ plantation, onSuccess }: PlantationFormProps) {
                   min: { value: 0, message: 'La superficie doit être positive' },
                 })}
                 disabled={isSubmitting}
-                className={cn(isSubmitting && 'bg-muted cursor-not-allowed')}
               />
               {errors.area && (
-                <p className="text-sm text-destructive">{errors.area.message}</p>
+                <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.area.message}</p>
               )}
             </div>
 
             <div className="space-y-2.5">
-              <Label htmlFor="city" className="flex items-center gap-2">
+              <Label htmlFor="city" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <MapPin className="h-4 w-4" />
                 {translations.plantations.city} *
               </Label>
@@ -265,10 +259,9 @@ export function PlantationForm({ plantation, onSuccess }: PlantationFormProps) {
                 id="city"
                 {...register('city', { required: `${translations.plantations.city} est requise` })}
                 disabled={isSubmitting}
-                className={cn(isSubmitting && 'bg-muted cursor-not-allowed')}
               />
               {errors.city && (
-                <p className="text-sm text-destructive">{errors.city.message}</p>
+                <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.city.message}</p>
               )}
             </div>
           </div>
@@ -276,7 +269,7 @@ export function PlantationForm({ plantation, onSuccess }: PlantationFormProps) {
           {/* Coordinates */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2.5">
-              <Label htmlFor="latitude" className="flex items-center gap-2">
+              <Label htmlFor="latitude" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <MapPin className="h-4 w-4" />
                 {translations.plantations.latitude} *
               </Label>
@@ -290,15 +283,14 @@ export function PlantationForm({ plantation, onSuccess }: PlantationFormProps) {
                   max: { value: 90, message: 'Latitude invalide' },
                 })}
                 disabled={isSubmitting}
-                className={cn(isSubmitting && 'bg-muted cursor-not-allowed')}
               />
               {errors.latitude && (
-                <p className="text-sm text-destructive">{errors.latitude.message}</p>
+                <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.latitude.message}</p>
               )}
             </div>
 
             <div className="space-y-2.5">
-              <Label htmlFor="longitude" className="flex items-center gap-2">
+              <Label htmlFor="longitude" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <MapPin className="h-4 w-4" />
                 {translations.plantations.longitude} *
               </Label>
@@ -312,33 +304,32 @@ export function PlantationForm({ plantation, onSuccess }: PlantationFormProps) {
                   max: { value: 180, message: 'Longitude invalide' },
                 })}
                 disabled={isSubmitting}
-                className={cn(isSubmitting && 'bg-muted cursor-not-allowed')}
               />
               {errors.longitude && (
-                <p className="text-sm text-destructive">{errors.longitude.message}</p>
+                <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.longitude.message}</p>
               )}
             </div>
           </div>
 
           {/* Polygon Drawing */}
           <div className="space-y-2.5">
-            <Label className="flex items-center gap-2">
+            <Label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <MapIcon className="h-4 w-4" />
               Contour de la Plantation
             </Label>
             <div className="flex gap-2">
               <Button
                 type="button"
-                variant="outline"
+                appearance="outline"
+                icon={<MapPin className="h-4 w-4" />}
                 onClick={handleAddPolygonPoint}
                 disabled={isSubmitting}
               >
-                <MapPin className="h-4 w-4 mr-2" />
                 {translations.plantations.addPolygonPoint} ({polygonPoints.length})
               </Button>
               <Button
                 type="button"
-                variant="outline"
+                appearance="outline"
                 onClick={handleClearPolygon}
                 disabled={isSubmitting || polygonPoints.length === 0}
               >
@@ -346,7 +337,7 @@ export function PlantationForm({ plantation, onSuccess }: PlantationFormProps) {
               </Button>
             </div>
             {polygonPoints.length > 0 && (
-              <p className="text-sm text-muted-foreground">
+              <p style={{ fontSize: '14px', color: '#6b7280', marginTop: '4px' }}>
                 {polygonPoints.length} point(s) ajouté(s) au polygone
               </p>
             )}
@@ -354,26 +345,27 @@ export function PlantationForm({ plantation, onSuccess }: PlantationFormProps) {
 
           {/* Employee Selection */}
           <div className="space-y-2.5">
-            <Label className="flex items-center gap-2">
+            <Label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Users className="h-4 w-4" />
               {translations.plantations.employees}
             </Label>
-            <div className="border rounded-md p-4 max-h-48 overflow-y-auto space-y-2">
+            <div style={{ border: '1px solid #e5e5e5', borderRadius: '8px', padding: '16px', maxHeight: '12rem', overflowY: 'auto' }}>
               {employees.length === 0 ? (
-                <p className="text-sm text-muted-foreground">Aucun employé disponible</p>
+                <p style={{ fontSize: '14px', color: '#6b7280' }}>Aucun employé disponible</p>
               ) : (
                 <Controller
                   name="employeeIds"
                   control={control}
                   defaultValue={[]}
                   render={({ field }) => (
-                    <>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                       {employees.map(employee => (
-                        <div key={employee.id} className="flex items-center space-x-2">
+                        <div key={employee.id} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                           <Checkbox
                             id={employee.id}
                             checked={field.value?.includes(employee.id)}
-                            onCheckedChange={checked => {
+                            onChange={(_, data) => {
+                              const checked = data.checked;
                               const newValue = checked
                                 ? [...(field.value || []), employee.id]
                                 : (field.value || []).filter(id => id !== employee.id);
@@ -383,13 +375,13 @@ export function PlantationForm({ plantation, onSuccess }: PlantationFormProps) {
                           />
                           <label
                             htmlFor={employee.id}
-                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            style={{ fontSize: '14px', fontWeight: '500', cursor: isSubmitting ? 'not-allowed' : 'pointer', opacity: isSubmitting ? 0.7 : 1 }}
                           >
                             {employee.firstName} {employee.lastName} - {employee.position}
                           </label>
                         </div>
                       ))}
-                    </>
+                    </div>
                   )}
                 />
               )}
@@ -397,21 +389,25 @@ export function PlantationForm({ plantation, onSuccess }: PlantationFormProps) {
           </div>
 
           {/* Submit Button */}
-          <Button type="submit" disabled={isSubmitting} className="w-full">
-            {isSubmitting ? (
-              <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                {plantation ? 'Mise à jour...' : 'Création...'}
-              </>
-            ) : (
-              <>
-                <Save className="h-4 w-4 mr-2" />
-                {plantation ? 'Mettre à jour' : 'Créer'}
-              </>
-            )}
+          <Button
+            type="submit"
+            appearance="primary"
+            disabled={isSubmitting}
+            icon={isSubmitting ? <Spinner size="tiny" /> : <Save className="h-4 w-4" />}
+            style={{
+              width: '100%',
+              backgroundColor: '#00a540',
+              color: '#fff',
+              borderRadius: '8px'
+            }}
+          >
+            {isSubmitting
+              ? (plantation ? 'Mise à jour...' : 'Création...')
+              : (plantation ? 'Mettre à jour' : 'Créer')
+            }
           </Button>
         </form>
-      </CardContent>
+      </div>
     </Card>
   );
 }
