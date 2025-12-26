@@ -516,6 +516,9 @@ button.fui-Dropdown:hover {
 
 /* Fluent UI Card - Remove borders */
 .fui-Card,
-div.fui-Card {
+div.fui-Card,
+div[role="group"].fui-Card,
+[class*="fui-Card"] {
   border: none !important;
+  outline: none !important;
 }
