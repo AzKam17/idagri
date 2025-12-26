@@ -444,7 +444,7 @@ span.fui-Input[class*="underline"]::after,
 
 span.fui-Input[class*="underline"]:focus-within,
 .fui-Input[class*="underline"]:focus-within {
-  background-color: #f0f0f0 !important;
+  background-color: #e8e8e8 !important;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08) !important;
 }
 
@@ -485,7 +485,7 @@ button.fui-Dropdown::after {
 .fui-Dropdown:focus-within,
 button.fui-Dropdown:focus,
 button.fui-Dropdown:hover {
-  background-color: #f0f0f0 !important;
+  background-color: #e8e8e8 !important;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08) !important;
 }
 
