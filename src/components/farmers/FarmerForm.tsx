@@ -362,8 +362,9 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                 <Dropdown
                   appearance="underline"
                   value={idCardTypeLabels[idCardType || 'cni']}
-                  selectedOptions={[idCardType || 'cni']}
-                  onOptionSelect={(_, data) => setValue('idCardType', data.optionValue as any)}
+                  onOptionSelect={(_, data) => {
+                    setValue('idCardType', data.optionValue as any, { shouldValidate: true });
+                  }}
                   disabled={isSubmitting}
                   style={{ width: '100%' }}
                 >
