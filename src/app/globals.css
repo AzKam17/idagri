@@ -499,3 +499,16 @@ button.fui-Dropdown:hover {
 .fui-Button[class*="primary"]:active {
   transform: translateY(0);
 }
+
+/* Dialog/Modal Customization - Remove solid borders */
+[role="dialog"],
+.DialogContent,
+[data-radix-dialog-content] {
+  border: none !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Remove borders from shadcn dialog */
+[data-radix-popper-content-wrapper] {
+  border: none !important;
+}
