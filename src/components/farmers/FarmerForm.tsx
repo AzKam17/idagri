@@ -11,9 +11,6 @@ import {
   Button,
   Input,
   Label,
-  Card,
-  CardHeader,
-  Body1,
   Spinner,
   Dropdown,
   Option
@@ -140,24 +137,38 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
   };
 
   return (
-    <Card style={{ padding: '32px', boxShadow: 'none', border: 'none', borderRadius: '8px', background: 'white' }}>
-      <CardHeader
-        header={
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <User className="h-5 w-5" />
-              <Body1 style={{ fontWeight: '600', fontSize: '20px' }}>
-                {farmer ? translations.farmers.editFarmer : translations.farmers.addFarmer}
-              </Body1>
-            </div>
-            <div style={{ fontSize: '14px', color: '#605e5c', fontWeight: '500' }}>
-              Étape {currentStep} sur 2
-            </div>
-          </div>
-        }
-      />
+    <div style={{ position: 'relative' }}>
+      {/* Loading Indicator */}
+      {isSubmitting && (
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '3px',
+          background: 'linear-gradient(90deg, var(--primary-color) 0%, var(--primary-hover) 100%)',
+          animation: 'shimmer 1.5s infinite',
+          zIndex: 10,
+          borderRadius: '8px 8px 0 0'
+        }} />
+      )}
+
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '32px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <User className="h-5 w-5" />
+          <h2 style={{ fontWeight: '600', fontSize: '20px', margin: 0 }}>
+            {farmer ? translations.farmers.editFarmer : translations.farmers.addFarmer}
+          </h2>
+        </div>
+        <div style={{ fontSize: '14px', color: '#605e5c', fontWeight: '500' }}>
+          Étape {currentStep} sur 2
+        </div>
+      </div>
+
+      {/* Form */}
       <div>
-        <form onSubmit={handleSubmit(onSubmit)} style={{ marginTop: '8px' }}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           {currentStep === 1 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
               {/* Photo Upload */}
@@ -423,6 +434,6 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
           )}
         </form>
       </div>
-    </Card>
+    </div>
   );
 }
