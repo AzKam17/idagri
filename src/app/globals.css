@@ -394,7 +394,8 @@ body {
 span.fui-Input,
 .fui-Input {
   background-color: #fafafa !important;
-  border-radius: 4px !important;
+  border: none !important;
+  border-radius: 8px !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   position: relative;
   min-height: 40px !important;
@@ -510,5 +511,11 @@ button.fui-Dropdown:hover {
 
 /* Remove borders from shadcn dialog */
 [data-radix-popper-content-wrapper] {
+  border: none !important;
+}
+
+/* Fluent UI Card - Remove borders */
+.fui-Card,
+div.fui-Card {
   border: none !important;
 }
