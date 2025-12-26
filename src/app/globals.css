@@ -399,11 +399,33 @@ span.fui-Input,
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
   position: relative;
   min-height: 40px !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+}
+
+span.fui-Input::after,
+.fui-Input::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 100%;
+  height: 2px;
+  background: var(--primary-color);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+  border-radius: 0 0 8px 8px;
 }
 
 span.fui-Input:focus-within,
 .fui-Input:focus-within {
   background-color: #e8e8e8 !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+span.fui-Input:focus-within::after,
+.fui-Input:focus-within::after {
+  transform: translateX(-50%) scaleX(1);
 }
 
 .fui-Input input,
