@@ -403,7 +403,7 @@ span.fui-Input,
 
 span.fui-Input:focus-within,
 .fui-Input:focus-within {
-  background-color: #ffffff !important;
+  background-color: #e8e8e8 !important;
 }
 
 .fui-Input input,
