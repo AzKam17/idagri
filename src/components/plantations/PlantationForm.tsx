@@ -68,15 +68,15 @@ export function PlantationForm({ plantation, onSuccess }: PlantationFormProps) {
   } = useForm<PlantationFormData>({
     defaultValues: plantation
       ? {
-          name: plantation.name,
-          farmerId: plantation.farmerId,
-          crops: plantation.crops.join(', '),
-          area: plantation.area,
-          city: plantation.city,
-          latitude: plantation.latitude,
-          longitude: plantation.longitude,
-          employeeIds: plantation.employeeIds,
-        }
+        name: plantation.name,
+        farmerId: plantation.farmerId,
+        crops: plantation.crops.join(', '),
+        area: plantation.area,
+        city: plantation.city,
+        latitude: plantation.latitude,
+        longitude: plantation.longitude,
+        employeeIds: plantation.employeeIds,
+      }
       : undefined,
   });
 
@@ -349,7 +349,7 @@ export function PlantationForm({ plantation, onSuccess }: PlantationFormProps) {
               <Users className="h-4 w-4" />
               {translations.plantations.employees}
             </Label>
-            <div style={{ border: '1px solid #e5e5e5', borderRadius: '8px', padding: '16px', maxHeight: '12rem', overflowY: 'auto' }}>
+            <div style={{ borderRadius: '8px', padding: '16px', maxHeight: '12rem', overflowY: 'auto' }}>
               {employees.length === 0 ? (
                 <p style={{ fontSize: '14px', color: '#6b7280' }}>Aucun employé disponible</p>
               ) : (
