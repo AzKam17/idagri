@@ -18,7 +18,7 @@ import {
   Dropdown,
   Option
 } from '@fluentui/react-components';
-import { User, Briefcase, MapPin, Upload, Save, ChevronRight, ChevronLeft, CreditCard, Globe } from 'lucide-react';
+import { User, Briefcase, MapPin, Upload, Save, ChevronRight, ChevronLeft, CreditCard, Globe, Camera } from 'lucide-react';
 
 interface FarmerFormData {
   firstName: string;
@@ -140,63 +140,101 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
   };
 
   return (
-    <Card style={{ padding: '24px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', borderRadius: '8px' }}>
+    <Card style={{ padding: '32px', boxShadow: 'none', border: 'none', borderRadius: '8px', background: 'white' }}>
       <CardHeader
         header={
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <User className="h-5 w-5" />
-              <Body1 style={{ fontWeight: 'bold' }}>
+              <Body1 style={{ fontWeight: '600', fontSize: '20px' }}>
                 {farmer ? translations.farmers.editFarmer : translations.farmers.addFarmer}
               </Body1>
             </div>
-            <div style={{ fontSize: '14px', color: '#605e5c' }}>
+            <div style={{ fontSize: '14px', color: '#605e5c', fontWeight: '500' }}>
               Étape {currentStep} sur 2
             </div>
           </div>
         }
       />
       <div>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-7" style={{ marginTop: '20px' }}>
+        <form onSubmit={handleSubmit(onSubmit)} style={{ marginTop: '8px' }}>
           {currentStep === 1 && (
-            <>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
               {/* Photo Upload */}
-              <div className="space-y-2.5">
-                <Label>{translations.farmers.photo}</Label>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                  {photo && (
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', paddingBottom: '24px', borderBottom: '1px solid #f0f0f0' }}>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePhotoChange}
+                  style={{ display: 'none' }}
+                  disabled={isSubmitting}
+                />
+                {photo ? (
+                  <div
+                    onClick={() => fileInputRef.current?.click()}
+                    style={{
+                      height: '120px',
+                      width: '120px',
+                      borderRadius: '50%',
+                      overflow: 'hidden',
+                      cursor: 'pointer',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                      transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                      position: 'relative'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'scale(1.05)';
+                      e.currentTarget.style.boxShadow = '0 6px 16px rgba(0,0,0,0.15)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'scale(1)';
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+                    }}
+                  >
                     <img
                       src={photo}
                       alt="Agriculteur"
-                      style={{ height: '96px', width: '96px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #e5e5e5', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
+                      style={{ height: '100%', width: '100%', objectFit: 'cover' }}
                     />
-                  )}
-                  <div>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept="image/*"
-                      onChange={handlePhotoChange}
-                      style={{ display: 'none' }}
-                      disabled={isSubmitting}
-                    />
-                    <Button
-                      appearance="outline"
-                      icon={<Upload className="h-4 w-4" />}
-                      onClick={() => fileInputRef.current?.click()}
-                      disabled={isSubmitting}
-                    >
-                      {translations.farmers.photoUpload}
-                    </Button>
                   </div>
-                </div>
+                ) : (
+                  <div
+                    onClick={() => fileInputRef.current?.click()}
+                    style={{
+                      height: '120px',
+                      width: '120px',
+                      borderRadius: '50%',
+                      background: '#f5f5f5',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      border: '2px dashed #d1d1d1'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#ebebeb';
+                      e.currentTarget.style.borderColor = '#00a540';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = '#f5f5f5';
+                      e.currentTarget.style.borderColor = '#d1d1d1';
+                    }}
+                  >
+                    <Camera style={{ width: '40px', height: '40px', color: '#8a8886' }} />
+                  </div>
+                )}
+                <Label style={{ fontSize: '14px', color: '#605e5c', textAlign: 'center' }}>
+                  {photo ? 'Cliquer pour changer la photo' : 'Cliquer pour ajouter une photo'}
+                </Label>
               </div>
 
               {/* Name Fields */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2.5">
-                  <Label htmlFor="firstName" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <User className="h-4 w-4" />
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <Label htmlFor="firstName" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '500', color: '#323130' }}>
+                    <User className="h-4 w-4" style={{ color: '#605e5c' }} />
                     {translations.farmers.firstName} *
                   </Label>
                   <Input
@@ -206,13 +244,13 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                     disabled={isSubmitting}
                   />
                   {errors.firstName && (
-                    <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.firstName.message}</p>
+                    <p style={{ fontSize: '12px', color: '#d13438', marginTop: '2px' }}>{errors.firstName.message}</p>
                   )}
                 </div>
 
-                <div className="space-y-2.5">
-                  <Label htmlFor="lastName" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <User className="h-4 w-4" />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <Label htmlFor="lastName" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '500', color: '#323130' }}>
+                    <User className="h-4 w-4" style={{ color: '#605e5c' }} />
                     {translations.farmers.lastName} *
                   </Label>
                   <Input
@@ -222,15 +260,15 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                     disabled={isSubmitting}
                   />
                   {errors.lastName && (
-                    <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.lastName.message}</p>
+                    <p style={{ fontSize: '12px', color: '#d13438', marginTop: '2px' }}>{errors.lastName.message}</p>
                   )}
                 </div>
               </div>
 
               {/* Profession */}
-              <div className="space-y-2.5">
-                <Label htmlFor="profession" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Briefcase className="h-4 w-4" />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <Label htmlFor="profession" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '500', color: '#323130' }}>
+                  <Briefcase className="h-4 w-4" style={{ color: '#605e5c' }} />
                   {translations.farmers.profession} *
                 </Label>
                 <Input
@@ -240,14 +278,14 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                   disabled={isSubmitting}
                 />
                 {errors.profession && (
-                  <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.profession.message}</p>
+                  <p style={{ fontSize: '12px', color: '#d13438', marginTop: '2px' }}>{errors.profession.message}</p>
                 )}
               </div>
 
               {/* City */}
-              <div className="space-y-2.5">
-                <Label htmlFor="city" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <MapPin className="h-4 w-4" />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <Label htmlFor="city" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '500', color: '#323130' }}>
+                  <MapPin className="h-4 w-4" style={{ color: '#605e5c' }} />
                   {translations.farmers.city} *
                 </Label>
                 <Input
@@ -257,7 +295,7 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                   disabled={isSubmitting}
                 />
                 {errors.city && (
-                  <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.city.message}</p>
+                  <p style={{ fontSize: '12px', color: '#d13438', marginTop: '2px' }}>{errors.city.message}</p>
                 )}
               </div>
 
@@ -273,20 +311,24 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                   width: '100%',
                   backgroundColor: '#00a540',
                   color: '#fff',
-                  borderRadius: '8px'
+                  borderRadius: '8px',
+                  height: '44px',
+                  fontSize: '15px',
+                  fontWeight: '600',
+                  marginTop: '12px'
                 }}
               >
                 Suivant
               </Button>
-            </>
+            </div>
           )}
 
           {currentStep === 2 && (
-            <>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
               {/* Nationality */}
-              <div className="space-y-2.5">
-                <Label htmlFor="nationality" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Globe className="h-4 w-4" />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <Label htmlFor="nationality" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '500', color: '#323130' }}>
+                  <Globe className="h-4 w-4" style={{ color: '#605e5c' }} />
                   Nationalité *
                 </Label>
                 <Input
@@ -296,14 +338,14 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                   disabled={isSubmitting}
                 />
                 {errors.nationality && (
-                  <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.nationality.message}</p>
+                  <p style={{ fontSize: '12px', color: '#d13438', marginTop: '2px' }}>{errors.nationality.message}</p>
                 )}
               </div>
 
               {/* ID Card Type */}
-              <div className="space-y-2.5">
-                <Label htmlFor="idCardType" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <CreditCard className="h-4 w-4" />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <Label htmlFor="idCardType" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '500', color: '#323130' }}>
+                  <CreditCard className="h-4 w-4" style={{ color: '#605e5c' }} />
                   Type de Pièce d'Identité *
                 </Label>
                 <Dropdown
@@ -319,14 +361,14 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                   <Option value="residence_permit">Titre de Séjour</Option>
                 </Dropdown>
                 {errors.idCardType && (
-                  <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.idCardType.message}</p>
+                  <p style={{ fontSize: '12px', color: '#d13438', marginTop: '2px' }}>{errors.idCardType.message}</p>
                 )}
               </div>
 
               {/* ID Card Number */}
-              <div className="space-y-2.5">
-                <Label htmlFor="idCardNumber" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <CreditCard className="h-4 w-4" />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <Label htmlFor="idCardNumber" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '14px', fontWeight: '500', color: '#323130' }}>
+                  <CreditCard className="h-4 w-4" style={{ color: '#605e5c' }} />
                   Numéro de la Pièce d'Identité *
                 </Label>
                 <Input
@@ -336,12 +378,12 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                   disabled={isSubmitting}
                 />
                 {errors.idCardNumber && (
-                  <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.idCardNumber.message}</p>
+                  <p style={{ fontSize: '12px', color: '#d13438', marginTop: '2px' }}>{errors.idCardNumber.message}</p>
                 )}
               </div>
 
               {/* Action Buttons */}
-              <div className="grid grid-cols-2 gap-4">
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '12px' }}>
                 <Button
                   type="button"
                   appearance="outline"
@@ -349,7 +391,10 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                   disabled={isSubmitting}
                   icon={<ChevronLeft className="h-4 w-4" />}
                   style={{
-                    borderRadius: '8px'
+                    borderRadius: '8px',
+                    height: '44px',
+                    fontSize: '15px',
+                    fontWeight: '600'
                   }}
                 >
                   Précédent
@@ -362,7 +407,10 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                   style={{
                     backgroundColor: '#00a540',
                     color: '#fff',
-                    borderRadius: '8px'
+                    borderRadius: '8px',
+                    height: '44px',
+                    fontSize: '15px',
+                    fontWeight: '600'
                   }}
                 >
                   {isSubmitting
@@ -371,7 +419,7 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                   }
                 </Button>
               </div>
-            </>
+            </div>
           )}
         </form>
       </div>
