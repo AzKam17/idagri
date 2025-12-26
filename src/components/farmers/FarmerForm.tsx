@@ -167,12 +167,12 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
       </div>
 
       {/* Form */}
-      <div style={{ minHeight: '520px' }}>
+      <div style={{ minHeight: '420px' }}>
         <form onSubmit={handleSubmit(onSubmit)}>
           {currentStep === 1 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
               {/* Photo Upload */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', paddingBottom: '24px', borderBottom: '1px solid #f0f0f0' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '20px', paddingBottom: '24px', borderBottom: '1px solid #f0f0f0' }}>
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -185,14 +185,15 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                   <div
                     onClick={() => fileInputRef.current?.click()}
                     style={{
-                      height: '120px',
-                      width: '120px',
+                      height: '100px',
+                      width: '100px',
                       borderRadius: '50%',
                       overflow: 'hidden',
                       cursor: 'pointer',
                       boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
                       transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                      position: 'relative'
+                      position: 'relative',
+                      flexShrink: 0
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.transform = 'scale(1.05)';
@@ -213,8 +214,8 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                   <div
                     onClick={() => fileInputRef.current?.click()}
                     style={{
-                      height: '120px',
-                      width: '120px',
+                      height: '100px',
+                      width: '100px',
                       borderRadius: '50%',
                       background: '#f5f5f5',
                       display: 'flex',
@@ -222,7 +223,8 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                       justifyContent: 'center',
                       cursor: 'pointer',
                       transition: 'all 0.2s ease',
-                      border: '2px dashed #d1d1d1'
+                      border: '2px dashed #d1d1d1',
+                      flexShrink: 0
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.background = '#ebebeb';
@@ -233,12 +235,17 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                       e.currentTarget.style.borderColor = '#d1d1d1';
                     }}
                   >
-                    <Camera style={{ width: '40px', height: '40px', color: '#8a8886' }} />
+                    <Camera style={{ width: '32px', height: '32px', color: '#8a8886' }} />
                   </div>
                 )}
-                <Label style={{ fontSize: '14px', color: '#605e5c', textAlign: 'center' }}>
-                  {photo ? 'Cliquer pour changer la photo' : 'Cliquer pour ajouter une photo'}
-                </Label>
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                  <Label style={{ fontSize: '14px', color: '#323130', fontWeight: '600', marginBottom: '4px' }}>
+                    Photo de profil
+                  </Label>
+                  <Label style={{ fontSize: '13px', color: '#605e5c' }}>
+                    {photo ? 'Cliquer sur la photo pour la modifier' : 'Cliquer sur l\'icône pour ajouter une photo'}
+                  </Label>
+                </div>
               </div>
 
               {/* Name Fields */}
@@ -311,26 +318,28 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
               </div>
 
               {/* Next Button */}
-              <Button
-                type="button"
-                appearance="primary"
-                onClick={handleNextStep}
-                disabled={isSubmitting}
-                icon={<ChevronRight className="h-4 w-4" />}
-                iconPosition="after"
-                style={{
-                  width: '100%',
-                  backgroundColor: '#00a540',
-                  color: '#fff',
-                  borderRadius: '8px',
-                  height: '44px',
-                  fontSize: '15px',
-                  fontWeight: '600',
-                  marginTop: '12px'
-                }}
-              >
-                Suivant
-              </Button>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '12px' }}>
+                <Button
+                  type="button"
+                  appearance="primary"
+                  onClick={handleNextStep}
+                  disabled={isSubmitting}
+                  icon={<ChevronRight className="h-4 w-4" />}
+                  iconPosition="after"
+                  style={{
+                    backgroundColor: '#00a540',
+                    color: '#fff',
+                    borderRadius: '8px',
+                    height: '40px',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    paddingLeft: '20px',
+                    paddingRight: '20px'
+                  }}
+                >
+                  Suivant
+                </Button>
+              </div>
             </div>
           )}
 
@@ -361,16 +370,18 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                 </Label>
                 <Dropdown
                   appearance="underline"
-                  value={idCardTypeLabels[idCardType || 'cni']}
+                  placeholder="Sélectionner un type"
+                  value={idCardTypeLabels[idCardType] || idCardTypeLabels['cni']}
                   onOptionSelect={(_, data) => {
-                    setValue('idCardType', data.optionValue as any, { shouldValidate: true });
+                    const newValue = data.optionValue as 'cni' | 'passport' | 'residence_permit';
+                    setValue('idCardType', newValue, { shouldValidate: true, shouldDirty: true });
                   }}
                   disabled={isSubmitting}
                   style={{ width: '100%' }}
                 >
-                  <Option value="cni">Carte Nationale d'Identité (CNI)</Option>
-                  <Option value="passport">Passeport</Option>
-                  <Option value="residence_permit">Titre de Séjour</Option>
+                  <Option key="cni" value="cni">Carte Nationale d'Identité (CNI)</Option>
+                  <Option key="passport" value="passport">Passeport</Option>
+                  <Option key="residence_permit" value="residence_permit">Titre de Séjour</Option>
                 </Dropdown>
                 {errors.idCardType && (
                   <p style={{ fontSize: '12px', color: '#d13438', marginTop: '2px' }}>{errors.idCardType.message}</p>
@@ -395,7 +406,7 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
               </div>
 
               {/* Action Buttons */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '12px' }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '12px' }}>
                 <Button
                   type="button"
                   appearance="outline"
@@ -404,9 +415,11 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                   icon={<ChevronLeft className="h-4 w-4" />}
                   style={{
                     borderRadius: '8px',
-                    height: '44px',
-                    fontSize: '15px',
-                    fontWeight: '600'
+                    height: '40px',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    paddingLeft: '20px',
+                    paddingRight: '20px'
                   }}
                 >
                   Précédent
@@ -420,9 +433,11 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                     backgroundColor: '#00a540',
                     color: '#fff',
                     borderRadius: '8px',
-                    height: '44px',
-                    fontSize: '15px',
-                    fontWeight: '600'
+                    height: '40px',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    paddingLeft: '20px',
+                    paddingRight: '20px'
                   }}
                 >
                   {isSubmitting
