@@ -8,7 +8,7 @@ import { localStorageService } from '@/lib/localStorage';
 import { DataTable, Column } from '@/components/common/DataTable';
 import { FarmerForm } from '@/components/farmers/FarmerForm';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { User, Plus, Eye, Trash2, Edit, QrCode, MapPin, Briefcase, Users, Sprout, CreditCard, Globe } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
@@ -226,9 +226,6 @@ function FarmersPageContent() {
 
       <Dialog open={isAddDialogOpen} onOpenChange={(open) => { setIsAddDialogOpen(open); if (!open) setSelectedFarmer(null); }}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-xl">{selectedFarmer ? translations.farmers.editFarmer : translations.farmers.addFarmer}</DialogTitle>
-          </DialogHeader>
           <FarmerForm
             farmer={selectedFarmer || undefined}
             onSuccess={() => {
