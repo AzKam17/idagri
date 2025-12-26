@@ -10,7 +10,7 @@ import { FarmerForm } from '@/components/farmers/FarmerForm';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { User, Plus, Eye, Trash2, Edit, QrCode, MapPin, Briefcase, Users, Sprout } from 'lucide-react';
+import { User, Plus, Eye, Trash2, Edit, QrCode, MapPin, Briefcase, Users, Sprout, CreditCard, Globe } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import { translations } from '@/lib/translations';
 
@@ -79,8 +79,8 @@ function FarmersPageContent() {
       accessorKey: 'city',
     },
     {
-      header: 'Employés',
-      cell: (farmer) => farmer.numberOfEmployees,
+      header: 'Nationalité',
+      cell: (farmer) => farmer.nationality,
     },
     {
       header: translations.farmers.plantations,
@@ -135,8 +135,12 @@ function FarmersPageContent() {
                   <p className="text-lg font-semibold">{selectedFarmer.city}</p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground mb-1">{translations.farmers.numberOfEmployees}</p>
-                  <p className="text-lg font-semibold">{selectedFarmer.numberOfEmployees}</p>
+                  <p className="text-sm font-medium text-muted-foreground mb-1">Nationalité</p>
+                  <p className="text-lg font-semibold">{selectedFarmer.nationality}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground mb-1">Pièce d'Identité</p>
+                  <p className="text-lg font-semibold">{selectedFarmer.idCardNumber}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-muted-foreground mb-1">{translations.farmers.plantations}</p>
@@ -291,10 +295,18 @@ function FarmersPageContent() {
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Users className="h-4 w-4 text-neutral-600" />
-                      <div className="text-base font-medium text-neutral-600">Employés</div>
+                      <Globe className="h-4 w-4 text-neutral-600" />
+                      <div className="text-base font-medium text-neutral-600">Nationalité</div>
                     </div>
-                    <div className="text-right text-base text-neutral-900">{selectedFarmer.numberOfEmployees}</div>
+                    <div className="text-right text-base text-neutral-900">{selectedFarmer.nationality}</div>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <CreditCard className="h-4 w-4 text-neutral-600" />
+                      <div className="text-base font-medium text-neutral-600">Pièce d'Identité</div>
+                    </div>
+                    <div className="text-right text-base text-neutral-900">{selectedFarmer.idCardNumber}</div>
                   </div>
 
                   <div className="flex items-center justify-between">

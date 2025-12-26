@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useAppStore } from '@/store';
 import { localStorageService } from '@/lib/localStorage';
+import { runMigrations } from '@/lib/migrations';
 
 export function DataLoader({ children }: { children: React.ReactNode }) {
   const setFarmers = useAppStore((state) => state.setFarmers);
@@ -15,6 +16,8 @@ export function DataLoader({ children }: { children: React.ReactNode }) {
   const setTransferOrders = useAppStore((state) => state.setTransferOrders);
 
   useEffect(() => {
+    // Run data migrations first
+    runMigrations();
     const farmers = localStorageService.getFarmers();
     const plantations = localStorageService.getPlantations();
     const employees = localStorageService.getEmployees();

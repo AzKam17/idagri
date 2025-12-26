@@ -7,7 +7,9 @@ export interface Farmer {
   photo?: string;
   profession: string;
   city: string;
-  numberOfEmployees: number;
+  nationality: string;
+  idCardType: 'cni' | 'passport' | 'residence_permit';
+  idCardNumber: string;
   createdAt: string;
   updatedAt: string;
 }
