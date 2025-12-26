@@ -391,32 +391,34 @@ body {
 }
 
 /* Fluent UI Input Customization */
+span.fui-Input,
 .fui-Input {
   background-color: #f5f5f5 !important;
   border-radius: 4px !important;
-  padding: 10px 12px !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative;
 }
 
+span.fui-Input:focus-within,
 .fui-Input:focus-within {
-  background-color: #fff !important;
-  box-shadow: 0 1px 0 0 var(--primary-color) !important;
+  background-color: #fafafa !important;
 }
 
-.fui-Input input {
+.fui-Input input,
+.fui-Input__input {
   background-color: transparent !important;
 }
 
 /* Fluent UI Underline Input Animation */
+span.fui-Input[class*="underline"],
 .fui-Input[class*="underline"] {
-  position: relative;
   background-color: #f5f5f5 !important;
   border-bottom: 1px solid #d1d1d1 !important;
   border-radius: 4px 4px 0 0 !important;
-  padding: 10px 12px !important;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  overflow: visible !important;
 }
 
+span.fui-Input[class*="underline"]::after,
 .fui-Input[class*="underline"]::after {
   content: '';
   position: absolute;
@@ -427,12 +429,16 @@ body {
   background: var(--primary-color);
   transform: scaleX(0);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
 }
 
+span.fui-Input[class*="underline"]:focus-within,
 .fui-Input[class*="underline"]:focus-within {
   background-color: #fafafa !important;
+  border-bottom-color: transparent !important;
 }
 
+span.fui-Input[class*="underline"]:focus-within::after,
 .fui-Input[class*="underline"]:focus-within::after {
   transform: scaleX(1);
 }
