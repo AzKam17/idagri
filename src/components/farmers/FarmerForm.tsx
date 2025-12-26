@@ -167,7 +167,7 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
       </div>
 
       {/* Form */}
-      <div>
+      <div style={{ minHeight: '520px' }}>
         <form onSubmit={handleSubmit(onSubmit)}>
           {currentStep === 1 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
