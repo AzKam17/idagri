@@ -389,3 +389,94 @@ body {
 .space-y-xl>*+* {
   margin-top: var(--spacing-xl);
 }
+
+/* Fluent UI Input Customization */
+.fui-Input {
+  background-color: #f5f5f5 !important;
+  border-radius: 4px !important;
+  padding: 10px 12px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.fui-Input:focus-within {
+  background-color: #fff !important;
+  box-shadow: 0 1px 0 0 var(--primary-color) !important;
+}
+
+.fui-Input input {
+  background-color: transparent !important;
+}
+
+/* Fluent UI Underline Input Animation */
+.fui-Input[class*="underline"] {
+  position: relative;
+  background-color: #f5f5f5 !important;
+  border-bottom: 1px solid #d1d1d1 !important;
+  border-radius: 4px 4px 0 0 !important;
+  padding: 10px 12px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.fui-Input[class*="underline"]::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--primary-color);
+  transform: scaleX(0);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fui-Input[class*="underline"]:focus-within {
+  background-color: #fafafa !important;
+}
+
+.fui-Input[class*="underline"]:focus-within::after {
+  transform: scaleX(1);
+}
+
+/* Fluent UI Dropdown Customization */
+.fui-Dropdown {
+  background-color: #f5f5f5 !important;
+  border-radius: 4px 4px 0 0 !important;
+  border-bottom: 1px solid #d1d1d1 !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.fui-Dropdown:focus-within {
+  background-color: #fafafa !important;
+  border-bottom-color: var(--primary-color) !important;
+}
+
+/* Fluent UI Button Customization */
+.fui-Button {
+  transition: all 0.2s ease !important;
+}
+
+.fui-Button[class*="outline"] {
+  background-color: #f5f5f5 !important;
+  border: 1px solid #d1d1d1 !important;
+}
+
+.fui-Button[class*="outline"]:hover {
+  background-color: #e8e8e8 !important;
+  border-color: #b8b8b8 !important;
+}
+
+.fui-Button[class*="primary"] {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+  box-shadow: 0 2px 4px rgba(0, 165, 64, 0.2) !important;
+}
+
+.fui-Button[class*="primary"]:hover {
+  background-color: var(--primary-hover) !important;
+  box-shadow: 0 4px 8px rgba(0, 165, 64, 0.3) !important;
+  transform: translateY(-1px);
+}
+
+.fui-Button[class*="primary"]:active {
+  transform: translateY(0);
+}

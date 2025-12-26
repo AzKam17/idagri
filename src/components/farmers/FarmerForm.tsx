@@ -204,7 +204,6 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                     appearance="underline"
                     {...register('firstName', { required: `${translations.farmers.firstName} est requis` })}
                     disabled={isSubmitting}
-                    style={{ borderColor: '#d1d1d1' }}
                   />
                   {errors.firstName && (
                     <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.firstName.message}</p>
@@ -221,7 +220,6 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                     appearance="underline"
                     {...register('lastName', { required: `${translations.farmers.lastName} est requis` })}
                     disabled={isSubmitting}
-                    style={{ borderColor: '#d1d1d1' }}
                   />
                   {errors.lastName && (
                     <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.lastName.message}</p>
@@ -240,7 +238,6 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                   appearance="underline"
                   {...register('profession', { required: `${translations.farmers.profession} est requise` })}
                   disabled={isSubmitting}
-                  style={{ borderColor: '#d1d1d1' }}
                 />
                 {errors.profession && (
                   <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.profession.message}</p>
@@ -258,7 +255,6 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                   appearance="underline"
                   {...register('city', { required: `${translations.farmers.city} est requise` })}
                   disabled={isSubmitting}
-                  style={{ borderColor: '#d1d1d1' }}
                 />
                 {errors.city && (
                   <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.city.message}</p>
@@ -298,7 +294,6 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                   appearance="underline"
                   {...register('nationality', { required: 'La nationalité est requise' })}
                   disabled={isSubmitting}
-                  style={{ borderColor: '#d1d1d1' }}
                 />
                 {errors.nationality && (
                   <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.nationality.message}</p>
@@ -317,7 +312,7 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                   selectedOptions={[idCardType || 'cni']}
                   onOptionSelect={(_, data) => setValue('idCardType', data.optionValue as any)}
                   disabled={isSubmitting}
-                  style={{ width: '100%', borderColor: '#d1d1d1' }}
+                  style={{ width: '100%' }}
                 >
                   <Option value="cni">Carte Nationale d'Identité (CNI)</Option>
                   <Option value="passport">Passeport</Option>
@@ -339,7 +334,6 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                   appearance="underline"
                   {...register('idCardNumber', { required: 'Le numéro de pièce d\'identité est requis' })}
                   disabled={isSubmitting}
-                  style={{ borderColor: '#d1d1d1' }}
                 />
                 {errors.idCardNumber && (
                   <p style={{ fontSize: '12px', color: '#d13438', marginTop: '4px' }}>{errors.idCardNumber.message}</p>
