@@ -13,17 +13,19 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Search, Plus, Scale, TrendingUp, Edit, Trash2, User, Calendar, Truck } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Search, Plus, Scale, TrendingUp, Trash2, User, Truck } from 'lucide-react';
 import WeighingForm from '@/components/weighings/WeighingForm';
 import { formatCurrency, formatShortDate } from '@/lib/planterUtils';
-import { Weighing } from '@/types';
+import { Weighing, Planter } from '@/types';
+
+type WeighingWithPlanter = Weighing & { planter?: Planter };
 
 export default function WeighingsPage() {
   const { weighings, planters, deleteWeighing } = useAppStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [selectedWeighing, setSelectedWeighing] = useState<Weighing | null>(null);
+  const [selectedWeighing, setSelectedWeighing] = useState<WeighingWithPlanter | null>(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const weighingsWithPlanters = weighings.map(weighing => {
@@ -42,7 +44,7 @@ export default function WeighingsPage() {
     0
   );
 
-  const handleRowClick = (weighing: any) => {
+  const handleRowClick = (weighing: WeighingWithPlanter) => {
     setSelectedWeighing(weighing);
     setIsPanelOpen(true);
   };
