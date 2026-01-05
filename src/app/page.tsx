@@ -1,17 +1,51 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useAppStore } from '@/store';
-import { User, Sprout, Users, Map, ArrowRight, Plus, TrendingUp } from 'lucide-react';
+import { User, Sprout, Users, Map, ArrowRight, Plus, TrendingUp, Database, Trash2 } from 'lucide-react';
 import { translations } from '@/lib/translations';
+import { loadFixtures, clearAllData } from '@/lib/loadFixtures';
+import { Button } from '@/components/ui/button';
 
 export default function HomePage() {
   const farmers = useAppStore((state) => state.farmers);
   const plantations = useAppStore((state) => state.plantations);
   const employees = useAppStore((state) => state.employees);
+  const planters = useAppStore((state) => state.planters);
+  const weighings = useAppStore((state) => state.weighings);
+  const [isLoading, setIsLoading] = useState(false);
 
   const totalArea = plantations.reduce((sum, p) => sum + Number(p.area), 0);
+
+  const handleLoadFixtures = () => {
+    setIsLoading(true);
+    try {
+      loadFixtures();
+      // Reload the page to refresh all state from localStorage
+      window.location.reload();
+    } catch (error) {
+      console.error('Error loading fixtures:', error);
+      alert('Erreur lors du chargement des données de démonstration');
+      setIsLoading(false);
+    }
+  };
+
+  const handleClearData = () => {
+    if (confirm('Êtes-vous sûr de vouloir supprimer toutes les données ? Cette action est irréversible.')) {
+      setIsLoading(true);
+      try {
+        clearAllData();
+        window.location.reload();
+      } catch (error) {
+        console.error('Error clearing data:', error);
+        alert('Erreur lors de la suppression des données');
+        setIsLoading(false);
+      }
+    }
+  };
+
+  const hasData = farmers.length > 0 || planters.length > 0 || weighings.length > 0;
 
   const stats = [
     {
@@ -160,6 +194,64 @@ export default function HomePage() {
               </li>
             ))}
           </ul>
+        </div>
+      </div>
+
+      {/* Sample Data Section */}
+      <div className="fluent-card">
+        <div className="card-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
+            <div style={{
+              width: '32px',
+              height: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '8px',
+              background: 'color-mix(in srgb, #00a540 10%, transparent)'
+            }}>
+              <Database style={{ width: '18px', height: '18px', color: '#00a540' }} />
+            </div>
+            <div>
+              <div className="card-title">Données de démonstration</div>
+              <div className="card-description">
+                {hasData
+                  ? 'Chargez des données d\'exemple ou effacez toutes les données'
+                  : 'Commencez avec des données d\'exemple pour explorer l\'application'
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+          <Button
+            onClick={handleLoadFixtures}
+            disabled={isLoading}
+            className="bg-black text-white hover:bg-black/90"
+          >
+            <Database className="mr-2 h-4 w-4" />
+            {isLoading ? 'Chargement...' : 'Charger les données de démonstration'}
+          </Button>
+
+          {hasData && (
+            <Button
+              onClick={handleClearData}
+              disabled={isLoading}
+              variant="outline"
+              className="border-red-500 text-red-500 hover:bg-red-50"
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              Effacer toutes les données
+            </Button>
+          )}
+        </div>
+
+        <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+          <p className="text-sm text-blue-800">
+            Les données de démonstration incluent : planteurs, transporteurs, véhicules, pesées,
+            crédits avec échéanciers, bulletins de paye validés, et paramètres de la coopérative.
+          </p>
         </div>
       </div>
     </div>

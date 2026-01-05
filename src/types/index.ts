@@ -2,14 +2,19 @@ import { LatLngExpression } from 'leaflet';
 
 export interface Farmer {
   id: string;
+  code: string;
   firstName: string;
   lastName: string;
-  photo?: string;
-  profession: string;
-  city: string;
-  nationality: string;
-  idCardType: 'cni' | 'passport' | 'residence_permit';
-  idCardNumber: string;
+  village: string;
+  plantationSize: number;
+  latitude: number;
+  longitude: number;
+  phone?: string;
+  idCardType?: 'cni' | 'passport' | 'residence_permit';
+  idCardNumber?: string;
+  bankName?: string;
+  bankAgency?: string;
+  bankAccountNumber?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -40,31 +45,36 @@ export interface Employee {
   updatedAt: string;
 }
 
-export interface Planter {
+export interface Transporter {
   id: string;
-  code: string;
-  firstName: string;
-  lastName: string;
-  village: string;
-  plantationSize: number;
-  latitude: number;
-  longitude: number;
-  phone?: string;
-  bankName?: string;
-  bankAccountNumber?: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type VehicleType = 'tricycle' | 'camion' | 'camionnette' | 'pickup' | 'autre';
+
+export interface Vehicle {
+  id: string;
+  registration: string;
+  type: VehicleType;
+  transporterId: string;
+  driverName?: string;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface Weighing {
   id: string;
-  planterId: string;
+  farmerId: string;
   period: string;
   weighingDate: string;
+  transporterId?: string;
+  vehicleId?: string;
   driverName: string;
   vehicleRegistration: string;
-  grossWeight: number;
-  tare: number;
+  loadedWeight: number;
+  emptyWeight: number;
   netWeight: number;
   price: number;
   transportCost: number;
@@ -75,13 +85,26 @@ export interface Weighing {
 
 export type CreditType = 'money' | 'tools';
 
+export interface CreditInstallment {
+  id: string;
+  creditId: string;
+  amount: number;
+  dueDate: string;
+  isPaid: boolean;
+  paidDate?: string;
+  paymentId?: string;
+}
+
 export interface Credit {
   id: string;
-  planterId: string;
+  farmerId: string;
   type: CreditType;
   amount: number;
   description: string;
   date: string;
+  installmentsCount?: number;
+  deductionStartDate?: string;
+  installments?: CreditInstallment[];
   isPaid: boolean;
   paidDate?: string;
   createdAt: string;
@@ -92,7 +115,7 @@ export type PaymentMethod = 'cash' | 'transfer' | 'check';
 
 export interface Payment {
   id: string;
-  planterId: string;
+  farmerId: string;
   weighingId: string;
   grossAmount: number;
   creditsDeducted: number;
@@ -122,9 +145,9 @@ export interface MonthlyRevenue {
 }
 
 export interface RevenueStatement {
-  planterId: string;
-  planterCode: string;
-  planterName: string;
+  farmerId: string;
+  farmerCode: string;
+  farmerName: string;
   year: number;
   monthlyRevenues: MonthlyRevenue[];
   totalTonnage: number;
@@ -132,20 +155,81 @@ export interface RevenueStatement {
   averageRevenue: number;
 }
 
+export interface Bank {
+  id: string;
+  name: string;
+  agency?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type BulletinStatus = 'draft' | 'validated' | 'cancelled';
+
+export interface BulletinDeduction {
+  creditId: string;
+  creditType: CreditType;
+  description: string;
+  amount: number;
+}
+
+export interface Bulletin {
+  id: string;
+  farmerId: string;
+  period: string;
+  weighingIds: string[];
+  grossAmount: number;
+  deductions: BulletinDeduction[];
+  totalDeductions: number;
+  netAmount: number;
+  status: BulletinStatus;
+  generatedDate: string;
+  validatedDate?: string;
+  cancelledDate?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface TransferOrder {
   id: string;
   period: string;
+  bankId: string;
   bankName: string;
-  debitAccount: string;
+  debitAccount?: string;
   totalAmount: number;
+  bulletinIds: string[];
   transfers: {
     accountNumber: string;
-    planterCode: string;
-    planterName: string;
+    farmerCode: string;
+    farmerName: string;
     production: number;
     netAmount: number;
   }[];
   createdAt: string;
+}
+
+export interface CompanySettings {
+  id: string;
+  name: string;
+  address: string;
+  phone?: string;
+  email?: string;
+  registrationNumber?: string;
+  logoBase64?: string;
+  customMessage?: string;
+  bonusEnabled: boolean;
+  bonusMinDeliveries: number;
+  bonusAmountPerKg: number;
+  bonusPeriodMonths: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Mandatary {
+  id: string;
+  name: string;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface PlantationWithFarmer extends Plantation {

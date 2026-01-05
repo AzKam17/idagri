@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { User, Sprout, Map, Users, Home, UserCheck, Scale, CreditCard, Menu, X, ChevronRight } from 'lucide-react';
+import { User, Sprout, Map, Users, Home, UserCheck, Scale, CreditCard, Menu, X, ChevronRight, Truck, Car, Building, FileText, BarChart3, Settings } from 'lucide-react';
 import { translations } from '@/lib/translations';
 import { useAppStore } from '@/store';
 import './Navigation.css';
@@ -14,8 +14,14 @@ const navItems = [
   { href: '/plantations', label: translations.nav.plantations, icon: Sprout },
   { href: '/employees', label: translations.nav.employees, icon: Users },
   { href: '/planters', label: 'Planteurs', icon: UserCheck },
+  { href: '/transporters', label: 'Transporteurs', icon: Truck },
+  { href: '/vehicles', label: 'Véhicules', icon: Car },
   { href: '/weighings', label: 'Pesées', icon: Scale },
   { href: '/credits', label: 'Créances', icon: CreditCard },
+  { href: '/banks', label: 'Banques', icon: Building },
+  { href: '/bulletins', label: 'Bulletins', icon: FileText },
+  { href: '/reports', label: 'Rapports', icon: BarChart3 },
+  { href: '/settings', label: 'Paramètres', icon: Settings },
   { href: '/map', label: translations.nav.map, icon: Map },
 ];
 

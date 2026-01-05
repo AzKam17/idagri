@@ -141,8 +141,8 @@ export default function WeighingsPage() {
                     <TableHead>Date</TableHead>
                     <TableHead>Période</TableHead>
                     <TableHead>Planteur</TableHead>
-                    <TableHead>Poids Brut (kg)</TableHead>
-                    <TableHead>Tare (kg)</TableHead>
+                    <TableHead>Poids à charge (kg)</TableHead>
+                    <TableHead>Poids à vide (kg)</TableHead>
                     <TableHead>Poids Net (kg)</TableHead>
                     <TableHead>Prix (FCFA/kg)</TableHead>
                     <TableHead>Chauffeur</TableHead>
@@ -167,8 +167,8 @@ export default function WeighingsPage() {
                           <span className="text-gray-400">-</span>
                         )}
                       </TableCell>
-                      <TableCell>{weighing.grossWeight.toFixed(0)}</TableCell>
-                      <TableCell>{weighing.tare.toFixed(0)}</TableCell>
+                      <TableCell>{weighing.loadedWeight.toFixed(0)}</TableCell>
+                      <TableCell>{weighing.emptyWeight.toFixed(0)}</TableCell>
                       <TableCell className="font-medium">{weighing.netWeight.toFixed(0)}</TableCell>
                       <TableCell>{weighing.price}</TableCell>
                       <TableCell>{weighing.driverName}</TableCell>
@@ -234,17 +234,17 @@ export default function WeighingsPage() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Scale className="h-4 w-4 text-neutral-600" />
-                      <div className="text-base font-medium text-neutral-600">Poids Brut</div>
+                      <div className="text-base font-medium text-neutral-600">Poids à charge</div>
                     </div>
-                    <div className="text-right text-base text-neutral-900">{selectedWeighing.grossWeight.toFixed(0)} kg</div>
+                    <div className="text-right text-base text-neutral-900">{selectedWeighing.loadedWeight.toFixed(0)} kg</div>
                   </div>
 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Scale className="h-4 w-4 text-neutral-600" />
-                      <div className="text-base font-medium text-neutral-600">Tare</div>
+                      <div className="text-base font-medium text-neutral-600">Poids à vide</div>
                     </div>
-                    <div className="text-right text-base text-neutral-900">{selectedWeighing.tare.toFixed(0)} kg</div>
+                    <div className="text-right text-base text-neutral-900">{selectedWeighing.emptyWeight.toFixed(0)} kg</div>
                   </div>
 
                   <div className="flex items-center justify-between">

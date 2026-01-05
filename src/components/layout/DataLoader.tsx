@@ -9,11 +9,16 @@ export function DataLoader({ children }: { children: React.ReactNode }) {
   const setFarmers = useAppStore((state) => state.setFarmers);
   const setPlantations = useAppStore((state) => state.setPlantations);
   const setEmployees = useAppStore((state) => state.setEmployees);
-  const setPlanters = useAppStore((state) => state.setPlanters);
   const setWeighings = useAppStore((state) => state.setWeighings);
   const setCredits = useAppStore((state) => state.setCredits);
   const setPayments = useAppStore((state) => state.setPayments);
   const setTransferOrders = useAppStore((state) => state.setTransferOrders);
+  const setTransporters = useAppStore((state) => state.setTransporters);
+  const setVehicles = useAppStore((state) => state.setVehicles);
+  const setBanks = useAppStore((state) => state.setBanks);
+  const setBulletins = useAppStore((state) => state.setBulletins);
+  const setCompanySettings = useAppStore((state) => state.setCompanySettings);
+  const setMandataries = useAppStore((state) => state.setMandataries);
 
   useEffect(() => {
     // Run data migrations first
@@ -21,21 +26,31 @@ export function DataLoader({ children }: { children: React.ReactNode }) {
     const farmers = localStorageService.getFarmers();
     const plantations = localStorageService.getPlantations();
     const employees = localStorageService.getEmployees();
-    const planters = localStorageService.getPlanters();
     const weighings = localStorageService.getWeighings();
     const credits = localStorageService.getCredits();
     const payments = localStorageService.getPayments();
     const transferOrders = localStorageService.getTransferOrders();
+    const transporters = localStorageService.getTransporters();
+    const vehicles = localStorageService.getVehicles();
+    const banks = localStorageService.getBanks();
+    const bulletins = localStorageService.getBulletins();
+    const companySettings = localStorageService.getCompanySettings();
+    const mandataries = localStorageService.getMandataries();
 
     setFarmers(farmers);
     setPlantations(plantations);
     setEmployees(employees);
-    setPlanters(planters);
     setWeighings(weighings);
     setCredits(credits);
     setPayments(payments);
     setTransferOrders(transferOrders);
-  }, [setFarmers, setPlantations, setEmployees, setPlanters, setWeighings, setCredits, setPayments, setTransferOrders]);
+    setTransporters(transporters);
+    setVehicles(vehicles);
+    setBanks(banks);
+    setBulletins(bulletins);
+    setCompanySettings(companySettings);
+    setMandataries(mandataries);
+  }, [setFarmers, setPlantations, setEmployees, setWeighings, setCredits, setPayments, setTransferOrders, setTransporters, setVehicles, setBanks, setBulletins, setCompanySettings, setMandataries]);
 
   return <>{children}</>;
 }

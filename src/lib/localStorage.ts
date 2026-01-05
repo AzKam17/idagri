@@ -1,14 +1,19 @@
-import { Farmer, Plantation, Employee, Planter, Weighing, Credit, Payment, TransferOrder } from '@/types';
+import { Farmer, Plantation, Employee, Weighing, Credit, Payment, TransferOrder, Transporter, Vehicle, Bank, Bulletin, CompanySettings, Mandatary } from '@/types';
 
 const STORAGE_KEYS = {
   FARMERS: 'idagri_farmers',
   PLANTATIONS: 'idagri_plantations',
   EMPLOYEES: 'idagri_employees',
-  PLANTERS: 'idagri_planters',
   WEIGHINGS: 'idagri_weighings',
   CREDITS: 'idagri_credits',
   PAYMENTS: 'idagri_payments',
   TRANSFER_ORDERS: 'idagri_transfer_orders',
+  TRANSPORTERS: 'idagri_transporters',
+  VEHICLES: 'idagri_vehicles',
+  BANKS: 'idagri_banks',
+  BULLETINS: 'idagri_bulletins',
+  COMPANY_SETTINGS: 'idagri_company_settings',
+  MANDATARIES: 'idagri_mandataries',
 };
 
 export const localStorageService = {
@@ -111,18 +116,6 @@ export const localStorageService = {
     localStorageService.saveEmployees(filtered);
   },
 
-  // Planters
-  getPlanters: (): Planter[] => {
-    if (typeof window === 'undefined') return [];
-    const data = localStorage.getItem(STORAGE_KEYS.PLANTERS);
-    return data ? JSON.parse(data) : [];
-  },
-
-  savePlanters: (planters: Planter[]): void => {
-    if (typeof window === 'undefined') return;
-    localStorage.setItem(STORAGE_KEYS.PLANTERS, JSON.stringify(planters));
-  },
-
   // Weighings
   getWeighings: (): Weighing[] => {
     if (typeof window === 'undefined') return [];
@@ -169,5 +162,81 @@ export const localStorageService = {
   saveTransferOrders: (transferOrders: TransferOrder[]): void => {
     if (typeof window === 'undefined') return;
     localStorage.setItem(STORAGE_KEYS.TRANSFER_ORDERS, JSON.stringify(transferOrders));
+  },
+
+  // Transporters
+  getTransporters: (): Transporter[] => {
+    if (typeof window === 'undefined') return [];
+    const data = localStorage.getItem(STORAGE_KEYS.TRANSPORTERS);
+    return data ? JSON.parse(data) : [];
+  },
+
+  saveTransporters: (transporters: Transporter[]): void => {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem(STORAGE_KEYS.TRANSPORTERS, JSON.stringify(transporters));
+  },
+
+  // Vehicles
+  getVehicles: (): Vehicle[] => {
+    if (typeof window === 'undefined') return [];
+    const data = localStorage.getItem(STORAGE_KEYS.VEHICLES);
+    return data ? JSON.parse(data) : [];
+  },
+
+  saveVehicles: (vehicles: Vehicle[]): void => {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem(STORAGE_KEYS.VEHICLES, JSON.stringify(vehicles));
+  },
+
+  // Banks
+  getBanks: (): Bank[] => {
+    if (typeof window === 'undefined') return [];
+    const data = localStorage.getItem(STORAGE_KEYS.BANKS);
+    return data ? JSON.parse(data) : [];
+  },
+
+  saveBanks: (banks: Bank[]): void => {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem(STORAGE_KEYS.BANKS, JSON.stringify(banks));
+  },
+
+  // Bulletins
+  getBulletins: (): Bulletin[] => {
+    if (typeof window === 'undefined') return [];
+    const data = localStorage.getItem(STORAGE_KEYS.BULLETINS);
+    return data ? JSON.parse(data) : [];
+  },
+
+  saveBulletins: (bulletins: Bulletin[]): void => {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem(STORAGE_KEYS.BULLETINS, JSON.stringify(bulletins));
+  },
+
+  // Company Settings
+  getCompanySettings: (): CompanySettings | null => {
+    if (typeof window === 'undefined') return null;
+    const data = localStorage.getItem(STORAGE_KEYS.COMPANY_SETTINGS);
+    return data ? JSON.parse(data) : null;
+  },
+
+  saveCompanySettings: (settings: CompanySettings | null): void => {
+    if (typeof window === 'undefined') return;
+    if (settings === null) {
+      localStorage.removeItem(STORAGE_KEYS.COMPANY_SETTINGS);
+    } else {
+      localStorage.setItem(STORAGE_KEYS.COMPANY_SETTINGS, JSON.stringify(settings));
+    }
+  },
+
+  // Mandataries
+  getMandataries: (): Mandatary[] => {
+    if (typeof window === 'undefined') return [];
+    const data = localStorage.getItem(STORAGE_KEYS.MANDATARIES);
+    return data ? JSON.parse(data) : [];
+  },
+
+  saveMandataries: (mandataries: Mandatary[]): void => {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem(STORAGE_KEYS.MANDATARIES, JSON.stringify(mandataries));
   },
 };
