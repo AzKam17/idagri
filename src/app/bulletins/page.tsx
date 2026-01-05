@@ -9,22 +9,22 @@ import { FileText, CheckCircle, XCircle, Eye } from 'lucide-react';
 import { formatCurrency } from '@/lib/planterUtils';
 
 export default function BulletinsPage() {
-  const { bulletins, planters, weighings, credits } = useAppStore();
+  const { bulletins, farmers, weighings, credits } = useAppStore();
   const [selectedPeriod, setSelectedPeriod] = useState('');
 
-  // Get planters with unpaid weighings
-  const getPlantersWithUnpaidWeighings = () => {
-    return planters.filter((planter) => {
-      const planterWeighings = weighings.filter((w) => w.planterId === planter.id);
+  // Get farmers with unpaid weighings
+  const getFarmersWithUnpaidWeighings = () => {
+    return farmers.filter((farmer) => {
+      const farmerWeighings = weighings.filter((w) => w.farmerId === farmer.id);
       const paidWeighingIds = bulletins
         .filter((b) => b.status !== 'cancelled')
         .flatMap((b) => b.weighingIds);
-      const unpaidWeighings = planterWeighings.filter((w) => !paidWeighingIds.includes(w.id));
+      const unpaidWeighings = farmerWeighings.filter((w) => !paidWeighingIds.includes(w.id));
       return unpaidWeighings.length > 0;
     });
   };
 
-  const plantersWithUnpaidWeighings = getPlantersWithUnpaidWeighings();
+  const farmersWithUnpaidWeighings = getFarmersWithUnpaidWeighings();
 
   const getStatusBadge = (status: BulletinStatus) => {
     const styles = {
@@ -44,9 +44,9 @@ export default function BulletinsPage() {
     );
   };
 
-  const getPlanterName = (planterId: string) => {
-    const planter = planters.find((p) => p.id === planterId);
-    return planter ? `${planter.code} - ${planter.firstName} ${planter.lastName}` : 'Inconnu';
+  const getFarmerName = (farmerId: string) => {
+    const farmer = farmers.find((f) => f.id === farmerId);
+    return farmer ? `${farmer.code} - ${farmer.firstName} ${farmer.lastName}` : 'Inconnu';
   };
 
   return (
@@ -81,7 +81,7 @@ export default function BulletinsPage() {
             <FileText className="h-4 w-4 text-gray-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{plantersWithUnpaidWeighings.length}</div>
+            <div className="text-2xl font-bold">{farmersWithUnpaidWeighings.length}</div>
             <p className="text-xs text-gray-600 mt-1">Planteurs avec pesées non payées</p>
           </CardContent>
         </Card>
@@ -119,28 +119,28 @@ export default function BulletinsPage() {
             <CardTitle>Planteurs en attente de paiement</CardTitle>
           </CardHeader>
           <CardContent>
-            {plantersWithUnpaidWeighings.length === 0 ? (
+            {farmersWithUnpaidWeighings.length === 0 ? (
               <p className="text-gray-500 text-center py-8">Aucun planteur en attente</p>
             ) : (
               <div className="space-y-2">
-                {plantersWithUnpaidWeighings.slice(0, 10).map((planter) => {
+                {farmersWithUnpaidWeighings.slice(0, 10).map((farmer) => {
                   const unpaidWeighings = weighings.filter((w) => {
                     const paidIds = bulletins
                       .filter((b) => b.status !== 'cancelled')
                       .flatMap((b) => b.weighingIds);
-                    return w.planterId === planter.id && !paidIds.includes(w.id);
+                    return w.farmerId === farmer.id && !paidIds.includes(w.id);
                   });
                   const totalWeight = unpaidWeighings.reduce((sum, w) => sum + w.netWeight, 0);
 
                   return (
                     <div
-                      key={planter.id}
+                      key={farmer.id}
                       className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
                     >
                       <div>
-                        <div className="font-medium">{planter.code}</div>
+                        <div className="font-medium">{farmer.code}</div>
                         <div className="text-sm text-gray-600">
-                          {planter.firstName} {planter.lastName}
+                          {farmer.firstName} {farmer.lastName}
                         </div>
                       </div>
                       <div className="text-right">
@@ -172,7 +172,7 @@ export default function BulletinsPage() {
                     className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
                   >
                     <div className="flex-1">
-                      <div className="font-medium">{getPlanterName(bulletin.planterId)}</div>
+                      <div className="font-medium">{getFarmerName(bulletin.farmerId)}</div>
                       <div className="text-sm text-gray-600">
                         {bulletin.period} • {new Date(bulletin.generatedDate).toLocaleDateString()}
                       </div>

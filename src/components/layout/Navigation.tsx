@@ -10,10 +10,9 @@ import './Navigation.css';
 
 const navItems = [
   { href: '/', label: translations.nav.home, icon: Home },
-  { href: '/farmers', label: translations.nav.farmers, icon: User },
+  { href: '/farmers', label: 'Agriculteurs', icon: User },
   { href: '/plantations', label: translations.nav.plantations, icon: Sprout },
   { href: '/employees', label: translations.nav.employees, icon: Users },
-  { href: '/planters', label: 'Planteurs', icon: UserCheck },
   { href: '/transporters', label: 'Transporteurs', icon: Truck },
   { href: '/vehicles', label: 'Véhicules', icon: Car },
   { href: '/weighings', label: 'Pesées', icon: Scale },

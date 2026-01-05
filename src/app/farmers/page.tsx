@@ -53,17 +53,17 @@ function FarmersPageContent() {
 
   const columns: Column<Farmer>[] = [
     {
-      header: translations.farmers.photo,
+      header: 'Avatar',
       icon: <User className="h-4 w-4" />,
       cell: (farmer) => (
-        farmer.photo ? (
-          <img src={farmer.photo} alt={farmer.firstName} className="h-12 w-12 rounded-full object-cover shadow-sm" />
-        ) : (
-          <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center shadow-sm">
-            <User className="h-6 w-6 text-muted-foreground" />
-          </div>
-        )
+        <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center shadow-sm">
+          <User className="h-6 w-6 text-muted-foreground" />
+        </div>
       ),
+    },
+    {
+      header: 'Code',
+      cell: (farmer) => farmer.code,
     },
     {
       header: 'Nom',
@@ -71,16 +71,16 @@ function FarmersPageContent() {
       cell: (farmer) => `${farmer.firstName} ${farmer.lastName}`,
     },
     {
-      header: translations.farmers.profession,
-      accessorKey: 'profession',
+      header: 'Village',
+      accessorKey: 'village',
     },
     {
-      header: translations.farmers.city,
-      accessorKey: 'city',
+      header: 'Superficie (ha)',
+      cell: (farmer) => farmer.plantationSize.toFixed(2),
     },
     {
       header: 'Nationalité',
-      cell: (farmer) => farmer.nationality,
+      cell: (farmer) => farmer.village,
     },
     {
       header: translations.farmers.plantations,
@@ -110,33 +110,25 @@ function FarmersPageContent() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex items-start gap-6">
-                {selectedFarmer.photo ? (
-                  <img
-                    src={selectedFarmer.photo}
-                    alt={selectedFarmer.firstName}
-                    className="h-28 w-28 rounded-full object-cover shadow-lg"
-                  />
-                ) : (
-                  <div className="h-28 w-28 rounded-full bg-muted flex items-center justify-center shadow-lg">
-                    <User className="h-14 w-14 text-muted-foreground" />
-                  </div>
-                )}
+                <div className="h-28 w-28 rounded-full bg-muted flex items-center justify-center shadow-lg">
+                  <User className="h-14 w-14 text-muted-foreground" />
+                </div>
                 <div className="space-y-2">
                   <h2 className="text-3xl font-bold">
                     {selectedFarmer.firstName} {selectedFarmer.lastName}
                   </h2>
-                  <p className="text-lg text-muted-foreground">{selectedFarmer.profession}</p>
+                  <p className="text-lg text-muted-foreground">{selectedFarmer.code}</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-6 pt-6 border-t">
                 <div>
                   <p className="text-sm font-medium text-muted-foreground mb-1">{translations.farmers.city}</p>
-                  <p className="text-lg font-semibold">{selectedFarmer.city}</p>
+                  <p className="text-lg font-semibold">{selectedFarmer.village}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-muted-foreground mb-1">Nationalité</p>
-                  <p className="text-lg font-semibold">{selectedFarmer.nationality}</p>
+                  <p className="text-lg font-semibold">{selectedFarmer.village}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-muted-foreground mb-1">Pièce d'Identité</p>
@@ -261,22 +253,14 @@ function FarmersPageContent() {
               <div className="flex-grow overflow-y-auto pt-28 pb-8">
                 {/* Farmer Photo and Name */}
                 <div className="flex flex-col items-center justify-center gap-5 mb-10">
-                  {selectedFarmer.photo ? (
-                    <img
-                      src={selectedFarmer.photo}
-                      alt={selectedFarmer.firstName}
-                      className="h-24 w-24 rounded-full object-cover shadow-lg"
-                    />
-                  ) : (
-                    <div className="h-24 w-24 rounded-full bg-neutral-100 flex items-center justify-center shadow-lg">
-                      <User className="h-12 w-12 text-neutral-400" />
-                    </div>
-                  )}
+                  <div className="h-24 w-24 rounded-full bg-neutral-100 flex items-center justify-center shadow-lg">
+                    <User className="h-12 w-12 text-neutral-400" />
+                  </div>
                   <div className="text-center">
                     <div className="text-3xl font-semibold leading-10 text-neutral-900">
                       {selectedFarmer.firstName} {selectedFarmer.lastName}
                     </div>
-                    <div className="text-base text-neutral-600 mt-1">{selectedFarmer.profession}</div>
+                    <div className="text-base text-neutral-600 mt-1">{selectedFarmer.code}</div>
                   </div>
                 </div>
 
@@ -287,7 +271,7 @@ function FarmersPageContent() {
                       <MapPin className="h-4 w-4 text-neutral-600" />
                       <div className="text-base font-medium text-neutral-600">Ville</div>
                     </div>
-                    <div className="text-right text-base text-neutral-900">{selectedFarmer.city}</div>
+                    <div className="text-right text-base text-neutral-900">{selectedFarmer.village}</div>
                   </div>
 
                   <div className="flex items-center justify-between">
@@ -295,7 +279,7 @@ function FarmersPageContent() {
                       <Globe className="h-4 w-4 text-neutral-600" />
                       <div className="text-base font-medium text-neutral-600">Nationalité</div>
                     </div>
-                    <div className="text-right text-base text-neutral-900">{selectedFarmer.nationality}</div>
+                    <div className="text-right text-base text-neutral-900">{selectedFarmer.village}</div>
                   </div>
 
                   <div className="flex items-center justify-between">

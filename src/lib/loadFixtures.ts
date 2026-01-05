@@ -7,7 +7,7 @@ export const loadFixtures = () => {
     banks,
     transporters,
     vehicles,
-    planters,
+    farmers,
     weighings,
     credits,
     bulletins,
@@ -18,7 +18,7 @@ export const loadFixtures = () => {
   localStorageService.saveBanks(banks);
   localStorageService.saveTransporters(transporters);
   localStorageService.saveVehicles(vehicles);
-  localStorageService.savePlanters(planters);
+  localStorageService.saveFarmers(farmers);
   localStorageService.saveWeighings(weighings);
   localStorageService.saveCredits(credits);
   localStorageService.saveBulletins(bulletins);
@@ -28,7 +28,7 @@ export const clearAllData = () => {
   localStorageService.saveFarmers([]);
   localStorageService.savePlantations([]);
   localStorageService.saveEmployees([]);
-  localStorageService.savePlanters([]);
+  localStorageService.saveFarmers([]);
   localStorageService.saveWeighings([]);
   localStorageService.saveCredits([]);
   localStorageService.saveTransporters([]);

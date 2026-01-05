@@ -2,7 +2,7 @@ import {
   Farmer,
   Plantation,
   Employee,
-  Planter,
+  Farmer,
   Weighing,
   Credit,
   Transporter,
@@ -144,36 +144,8 @@ export const vehicles: Vehicle[] = [
   },
 ];
 
-// Farmers
+// Farmers (Cocoa farmers / merged from planters)
 export const farmers: Farmer[] = [
-  {
-    id: '1',
-    firstName: 'Adjoua',
-    lastName: 'Kouamé',
-    profession: 'Agricultrice',
-    city: 'Bongouanou',
-    nationality: 'Ivoirienne',
-    idCardType: 'cni',
-    idCardNumber: 'CI1234567890',
-    createdAt: getDate(300),
-    updatedAt: getDate(300),
-  },
-  {
-    id: '2',
-    firstName: 'Kouassi',
-    lastName: 'N\'Dri',
-    profession: 'Planteur',
-    city: 'M\'Batto',
-    nationality: 'Ivoirien',
-    idCardType: 'cni',
-    idCardNumber: 'CI0987654321',
-    createdAt: getDate(300),
-    updatedAt: getDate(300),
-  },
-];
-
-// Planters (Cocoa farmers)
-export const planters: Planter[] = [
   {
     id: '1',
     code: 'PLT-001',
@@ -700,7 +672,7 @@ export const allFixtures = {
   transporters,
   vehicles,
   farmers,
-  planters,
+  farmers,
   weighings,
   credits,
   bulletins,

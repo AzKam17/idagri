@@ -17,24 +17,24 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Search, Plus, Scale, TrendingUp, Trash2, User, Truck } from 'lucide-react';
 import WeighingForm from '@/components/weighings/WeighingForm';
 import { formatCurrency, formatShortDate } from '@/lib/planterUtils';
-import { Weighing, Planter } from '@/types';
+import { Weighing, Farmer } from '@/types';
 
-type WeighingWithPlanter = Weighing & { planter?: Planter };
+type WeighingWithFarmer = Weighing & { farmer?: Farmer };
 
 export default function WeighingsPage() {
-  const { weighings, planters, deleteWeighing } = useAppStore();
+  const { weighings, farmers, deleteWeighing } = useAppStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [selectedWeighing, setSelectedWeighing] = useState<WeighingWithPlanter | null>(null);
+  const [selectedWeighing, setSelectedWeighing] = useState<WeighingWithFarmer | null>(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
-  const weighingsWithPlanters = weighings.map(weighing => {
-    const planter = planters.find(p => p.id === weighing.planterId);
-    return { ...weighing, planter };
+  const weighingsWithFarmers = weighings.map(weighing => {
+    const farmer = farmers.find(f => f.id === weighing.farmerId);
+    return { ...weighing, farmer };
   });
 
-  const filteredWeighings = weighingsWithPlanters.filter((weighing) => {
-    const searchString = `${weighing.planter?.code || ''} ${weighing.planter?.firstName || ''} ${weighing.planter?.lastName || ''} ${weighing.period} ${weighing.driverName}`;
+  const filteredWeighings = weighingsWithFarmers.filter((weighing) => {
+    const searchString = `${weighing.farmer?.code || ''} ${weighing.farmer?.firstName || ''} ${weighing.farmer?.lastName || ''} ${weighing.period} ${weighing.driverName}`;
     return searchString.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
@@ -44,7 +44,7 @@ export default function WeighingsPage() {
     0
   );
 
-  const handleRowClick = (weighing: WeighingWithPlanter) => {
+  const handleRowClick = (weighing: WeighingWithFarmer) => {
     setSelectedWeighing(weighing);
     setIsPanelOpen(true);
   };
@@ -156,11 +156,11 @@ export default function WeighingsPage() {
                       <TableCell>{formatShortDate(weighing.weighingDate)}</TableCell>
                       <TableCell className="font-medium">{weighing.period}</TableCell>
                       <TableCell>
-                        {weighing.planter ? (
+                        {weighing.farmer ? (
                           <div>
-                            <div className="font-medium">{weighing.planter.code}</div>
+                            <div className="font-medium">{weighing.farmer.code}</div>
                             <div className="text-sm text-gray-600">
-                              {weighing.planter.firstName} {weighing.planter.lastName}
+                              {weighing.farmer.firstName} {weighing.farmer.lastName}
                             </div>
                           </div>
                         ) : (
@@ -227,7 +227,7 @@ export default function WeighingsPage() {
                       <div className="text-base font-medium text-neutral-600">Planteur</div>
                     </div>
                     <div className="text-right text-base text-neutral-900">
-                      {selectedWeighing.planter ? `${selectedWeighing.planter.code} - ${selectedWeighing.planter.firstName} ${selectedWeighing.planter.lastName}` : '-'}
+                      {selectedWeighing.farmer ? `${selectedWeighing.farmer.code} - ${selectedWeighing.farmer.firstName} ${selectedWeighing.farmer.lastName}` : '-'}
                     </div>
                   </div>
 

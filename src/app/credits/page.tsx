@@ -21,7 +21,7 @@ import { Badge } from '@/components/ui/badge';
 import { Credit } from '@/types';
 
 export default function CreditsPage() {
-  const { credits, planters, updateCredit } = useAppStore();
+  const { credits, farmers, updateCredit } = useAppStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'money' | 'tools'>('all');
   const [filterStatus, setFilterStatus] = useState<'all' | 'pending' | 'paid'>('all');
@@ -29,13 +29,13 @@ export default function CreditsPage() {
   const [selectedCredit, setSelectedCredit] = useState<any>(null);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
 
-  const creditsWithPlanters = credits.map(credit => {
-    const planter = planters.find(p => p.id === credit.planterId);
-    return { ...credit, planter };
+  const creditsWithFarmers = credits.map(credit => {
+    const farmer = farmers.find(f => f.id === credit.farmerId);
+    return { ...credit, farmer };
   });
 
-  const filteredCredits = creditsWithPlanters.filter((credit) => {
-    const searchString = `${credit.planter?.code || ''} ${credit.planter?.firstName || ''} ${credit.planter?.lastName || ''} ${credit.description}`;
+  const filteredCredits = creditsWithFarmers.filter((credit) => {
+    const searchString = `${credit.farmer?.code || ''} ${credit.farmer?.firstName || ''} ${credit.farmer?.lastName || ''} ${credit.description}`;
     const matchesSearch = searchString.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesType = filterType === 'all' || credit.type === filterType;
     const matchesStatus = filterStatus === 'all' ||
@@ -210,11 +210,11 @@ export default function CreditsPage() {
                     <TableRow key={credit.id} onClick={() => handleRowClick(credit)} style={{ cursor: 'pointer' }}>
                       <TableCell>{formatShortDate(credit.date)}</TableCell>
                       <TableCell>
-                        {credit.planter ? (
+                        {credit.farmer ? (
                           <div>
-                            <div className="font-medium">{credit.planter.code}</div>
+                            <div className="font-medium">{credit.farmer.code}</div>
                             <div className="text-sm text-gray-600">
-                              {credit.planter.firstName} {credit.planter.lastName}
+                              {credit.farmer.firstName} {credit.farmer.lastName}
                             </div>
                           </div>
                         ) : (
@@ -301,7 +301,7 @@ export default function CreditsPage() {
                       <div className="text-base font-medium text-neutral-600">Planteur</div>
                     </div>
                     <div className="text-right text-base text-neutral-900">
-                      {selectedCredit.planter ? `${selectedCredit.planter.code} - ${selectedCredit.planter.firstName} ${selectedCredit.planter.lastName}` : '-'}
+                      {selectedCredit.farmer ? `${selectedCredit.farmer.code} - ${selectedCredit.farmer.firstName} ${selectedCredit.farmer.lastName}` : '-'}
                     </div>
                   </div>
 

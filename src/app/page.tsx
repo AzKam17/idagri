@@ -12,7 +12,6 @@ export default function HomePage() {
   const farmers = useAppStore((state) => state.farmers);
   const plantations = useAppStore((state) => state.plantations);
   const employees = useAppStore((state) => state.employees);
-  const planters = useAppStore((state) => state.planters);
   const weighings = useAppStore((state) => state.weighings);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -45,7 +44,7 @@ export default function HomePage() {
     }
   };
 
-  const hasData = farmers.length > 0 || planters.length > 0 || weighings.length > 0;
+  const hasData = farmers.length > 0 || weighings.length > 0;
 
   const stats = [
     {

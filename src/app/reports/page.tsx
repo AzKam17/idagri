@@ -17,9 +17,9 @@ import {
 } from '@/components/ui/select';
 
 export default function ReportsPage() {
-  const { planters, weighings, bulletins } = useAppStore();
+  const { farmers, weighings, bulletins } = useAppStore();
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString());
-  const [selectedPlanterId, setSelectedPlanterId] = useState('');
+  const [selectedFarmerId, setSelectedFarmerId] = useState('');
 
   const months = [
     'Janvier',
@@ -37,24 +37,24 @@ export default function ReportsPage() {
   ];
 
   const getAnnualSummary = () => {
-    const summary = planters.map((planter) => {
-      const planterWeighings = weighings.filter(
+    const summary = farmers.map((farmer) => {
+      const farmerWeighings = weighings.filter(
         (w) =>
-          w.planterId === planter.id &&
+          w.farmerId === farmer.id &&
           new Date(w.weighingDate).getFullYear().toString() === selectedYear
       );
 
       const monthlyData = months.map((_, index) => {
-        const monthWeighings = planterWeighings.filter(
+        const monthWeighings = farmerWeighings.filter(
           (w) => new Date(w.weighingDate).getMonth() === index
         );
         return monthWeighings.reduce((sum, w) => sum + w.netWeight, 0);
       });
 
-      const totalWeight = planterWeighings.reduce((sum, w) => sum + w.netWeight, 0);
+      const totalWeight = farmerWeighings.reduce((sum, w) => sum + w.netWeight, 0);
 
       return {
-        planter,
+        farmer,
         monthlyData,
         totalWeight,
       };
@@ -64,28 +64,28 @@ export default function ReportsPage() {
   };
 
   const getIndividualSummary = () => {
-    if (!selectedPlanterId) return null;
+    if (!selectedFarmerId) return null;
 
-    const planter = planters.find((p) => p.id === selectedPlanterId);
+    const planter = farmers.find((p) => p.id === selectedFarmerId);
     if (!planter) return null;
 
-    const planterWeighings = weighings.filter(
+    const farmerWeighings = weighings.filter(
       (w) =>
-        w.planterId === selectedPlanterId &&
+        w.farmerId === selectedFarmerId &&
         new Date(w.weighingDate).getFullYear().toString() === selectedYear
     );
 
-    const planterBulletins = bulletins.filter(
-      (b) => b.planterId === selectedPlanterId && b.status === 'validated'
+    const farmerBulletins = bulletins.filter(
+      (b) => b.farmerId === selectedFarmerId && b.status === 'validated'
     );
 
-    const totalWeight = planterWeighings.reduce((sum, w) => sum + w.netWeight, 0);
-    const totalAmount = planterBulletins.reduce((sum, b) => sum + b.netAmount, 0);
-    const deliveryCount = planterWeighings.length;
+    const totalWeight = farmerWeighings.reduce((sum, w) => sum + w.netWeight, 0);
+    const totalAmount = farmerBulletins.reduce((sum, b) => sum + b.netAmount, 0);
+    const deliveryCount = farmerWeighings.length;
 
     return {
       planter,
-      weighings: planterWeighings,
+      weighings: farmerWeighings,
       totalWeight,
       totalAmount,
       deliveryCount,
@@ -161,10 +161,10 @@ export default function ReportsPage() {
                     </td>
                   </tr>
                 ) : (
-                  annualSummary.map(({ planter, monthlyData, totalWeight }) => (
-                    <tr key={planter.id} className="border-b hover:bg-gray-50">
+                  annualSummary.map(({ farmer, monthlyData, totalWeight }) => (
+                    <tr key={farmer.id} className="border-b hover:bg-gray-50">
                       <td className="p-2 font-medium">
-                        {planter.code} - {planter.firstName} {planter.lastName}
+                        {farmer.code} - {farmer.firstName} {farmer.lastName}
                       </td>
                       {monthlyData.map((weight, index) => (
                         <td key={index} className="text-right p-2 text-sm">
@@ -191,14 +191,14 @@ export default function ReportsPage() {
         <CardContent className="space-y-4">
           <div className="flex items-center gap-4">
             <Label htmlFor="planter">Planteur:</Label>
-            <Select value={selectedPlanterId} onValueChange={setSelectedPlanterId}>
+            <Select value={selectedFarmerId} onValueChange={setSelectedFarmerId}>
               <SelectTrigger className="w-[300px]">
                 <SelectValue placeholder="Sélectionner un planteur" />
               </SelectTrigger>
               <SelectContent>
-                {planters.map((planter) => (
-                  <SelectItem key={planter.id} value={planter.id}>
-                    {planter.code} - {planter.firstName} {planter.lastName}
+                {farmers.map((farmer) => (
+                  <SelectItem key={farmer.id} value={farmer.id}>
+                    {farmer.code} - {farmer.firstName} {farmer.lastName}
                   </SelectItem>
                 ))}
               </SelectContent>
