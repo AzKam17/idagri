@@ -61,18 +61,18 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
   } = useForm<FarmerFormData>({
     defaultValues: farmer
       ? {
-          firstName: farmer.firstName,
-          lastName: farmer.lastName,
-          profession: farmer.profession,
-          city: farmer.city,
-          nationality: farmer.nationality,
-          idCardType: farmer.idCardType,
-          idCardNumber: farmer.idCardNumber,
-        }
+        firstName: farmer.firstName,
+        lastName: farmer.lastName,
+        profession: farmer.profession,
+        city: farmer.city,
+        nationality: farmer.nationality,
+        idCardType: farmer.idCardType,
+        idCardNumber: farmer.idCardNumber,
+      }
       : {
-          idCardType: 'cni',
-          nationality: 'Ivoirienne'
-        },
+        idCardType: 'cni',
+        nationality: 'Ivoirienne'
+      },
   });
 
   const idCardType = watch('idCardType');
