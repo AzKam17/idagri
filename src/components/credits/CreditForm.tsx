@@ -22,7 +22,7 @@ interface CreditFormProps {
 }
 
 interface CreditFormData {
-  planterId: string;
+  farmerId: string;
   type: CreditType;
   amount: number;
   description: string;
@@ -32,8 +32,8 @@ interface CreditFormData {
 }
 
 export default function CreditForm({ credit, onSuccess }: CreditFormProps) {
-  const { addCredit, updateCredit, planters } = useAppStore();
-  const [selectedPlanterId, setSelectedPlanterId] = useState<string | undefined>(credit?.planterId);
+  const { addCredit, updateCredit, farmers } = useAppStore();
+  const [selectedFarmerId, setSelectedFarmerId] = useState<string | undefined>(credit?.farmerId);
   const [selectedType, setSelectedType] = useState<CreditType | undefined>(credit?.type || 'money');
   const [installmentAmount, setInstallmentAmount] = useState<number>(0);
 
@@ -46,7 +46,7 @@ export default function CreditForm({ credit, onSuccess }: CreditFormProps) {
   } = useForm<CreditFormData>({
     defaultValues: credit
       ? {
-          planterId: credit.planterId,
+          farmerId: credit.farmerId,
           type: credit.type,
           amount: credit.amount,
           description: credit.description,
@@ -119,7 +119,7 @@ export default function CreditForm({ credit, onSuccess }: CreditFormProps) {
 
       const newCredit: Credit = {
         id: creditId,
-        planterId: data.planterId,
+        farmerId: data.farmerId,
         type: data.type,
         amount: data.amount,
         description: data.description,
@@ -141,28 +141,28 @@ export default function CreditForm({ credit, onSuccess }: CreditFormProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="planterId">Planteur *</Label>
+        <Label htmlFor="farmerId">Agriculteur *</Label>
         <Select
-          value={selectedPlanterId}
+          value={selectedFarmerId}
           onValueChange={(value) => {
-            setSelectedPlanterId(value);
-            setValue('planterId', value, { shouldValidate: true });
+            setSelectedFarmerId(value);
+            setValue('farmerId', value, { shouldValidate: true });
           }}
         >
           <SelectTrigger>
-            <SelectValue placeholder="Sélectionner un planteur" />
+            <SelectValue placeholder="Sélectionner un agriculteur" />
           </SelectTrigger>
           <SelectContent>
-            {planters.map((planter) => (
-              <SelectItem key={planter.id} value={planter.id}>
-                {planter.code} - {planter.firstName} {planter.lastName}
+            {farmers.map((farmer) => (
+              <SelectItem key={farmer.id} value={farmer.id}>
+                {farmer.code} - {farmer.firstName} {farmer.lastName}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
-        <input type="hidden" {...register('planterId', { required: true })} />
-        {errors.planterId && (
-          <p className="text-sm text-red-500">Le planteur est requis</p>
+        <input type="hidden" {...register('farmerId', { required: true })} />
+        {errors.farmerId && (
+          <p className="text-sm text-red-500">L'agriculteur est requis</p>
         )}
       </div>
 

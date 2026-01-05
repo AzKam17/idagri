@@ -22,7 +22,7 @@ interface WeighingFormProps {
 }
 
 interface WeighingFormData {
-  planterId: string;
+  farmerId: string;
   period: string;
   weighingDate: string;
   transporterId?: string;
@@ -37,8 +37,8 @@ interface WeighingFormData {
 }
 
 export default function WeighingForm({ weighing, onSuccess }: WeighingFormProps) {
-  const { addWeighing, updateWeighing, planters, transporters, vehicles } = useAppStore();
-  const [selectedPlanterId, setSelectedPlanterId] = useState<string | undefined>(weighing?.planterId);
+  const { addWeighing, updateWeighing, farmers, transporters, vehicles } = useAppStore();
+  const [selectedFarmerId, setSelectedFarmerId] = useState<string | undefined>(weighing?.farmerId);
   const [selectedTransporterId, setSelectedTransporterId] = useState<string | undefined>(weighing?.transporterId);
   const [selectedVehicleId, setSelectedVehicleId] = useState<string | undefined>(weighing?.vehicleId);
 
@@ -59,7 +59,7 @@ export default function WeighingForm({ weighing, onSuccess }: WeighingFormProps)
   } = useForm<WeighingFormData>({
     defaultValues: weighing
       ? {
-          planterId: weighing.planterId,
+          farmerId: weighing.farmerId,
           period: weighing.period,
           weighingDate: weighing.weighingDate,
           transporterId: weighing.transporterId,
@@ -141,7 +141,7 @@ export default function WeighingForm({ weighing, onSuccess }: WeighingFormProps)
     } else {
       const newWeighing: Weighing = {
         id: Date.now().toString(),
-        planterId: data.planterId,
+        farmerId: data.farmerId,
         period: data.period,
         weighingDate: data.weighingDate,
         transporterId: data.transporterId,
@@ -164,37 +164,37 @@ export default function WeighingForm({ weighing, onSuccess }: WeighingFormProps)
     onSuccess?.();
   };
 
-  const selectedPlanter = planters.find((p) => p.id === selectedPlanterId);
+  const selectedFarmer = farmers.find((f) => f.id === selectedFarmerId);
   const selectedVehicle = vehicles.find((v) => v.id === selectedVehicleId);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="planterId">Planteur *</Label>
+        <Label htmlFor="farmerId">Agriculteur *</Label>
         <Select
-          value={selectedPlanterId}
+          value={selectedFarmerId}
           onValueChange={(value) => {
-            setSelectedPlanterId(value);
-            setValue('planterId', value, { shouldValidate: true });
+            setSelectedFarmerId(value);
+            setValue('farmerId', value, { shouldValidate: true });
           }}
         >
           <SelectTrigger>
             <SelectValue placeholder="Sélectionner un planteur" />
           </SelectTrigger>
           <SelectContent>
-            {planters.map((planter) => (
-              <SelectItem key={planter.id} value={planter.id}>
-                {planter.code} - {planter.firstName} {planter.lastName}
+            {farmers.map((farmer) => (
+              <SelectItem key={farmer.id} value={farmer.id}>
+                {farmer.code} - {farmer.firstName} {farmer.lastName}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
-        <input type="hidden" {...register('planterId', { required: true })} />
-        {errors.planterId && (
-          <p className="text-sm text-red-500">Le planteur est requis</p>
+        <input type="hidden" {...register('farmerId', { required: true })} />
+        {errors.farmerId && (
+          <p className="text-sm text-red-500">L'agriculteur est requis</p>
         )}
-        {selectedPlanter && (
-          <p className="text-sm text-gray-600">Code: {selectedPlanter.code}</p>
+        {selectedFarmer && (
+          <p className="text-sm text-gray-600">Code: {selectedFarmer.code}</p>
         )}
       </div>
 
