@@ -18,13 +18,19 @@ import {
 import { User, Briefcase, MapPin, Upload, Save, ChevronRight, ChevronLeft, CreditCard, Globe, Camera } from 'lucide-react';
 
 interface FarmerFormData {
+  code: string;
   firstName: string;
   lastName: string;
-  profession: string;
-  city: string;
-  nationality: string;
-  idCardType: 'cni' | 'passport' | 'residence_permit';
-  idCardNumber: string;
+  village: string;
+  plantationSize: number;
+  latitude: number;
+  longitude: number;
+  phone?: string;
+  idCardType?: 'cni' | 'passport' | 'residence_permit';
+  idCardNumber?: string;
+  bankName?: string;
+  bankAgency?: string;
+  bankAccountNumber?: string;
 }
 
 interface FarmerFormProps {
@@ -34,7 +40,7 @@ interface FarmerFormProps {
 
 export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [photo, setPhoto] = useState<string | undefined>(farmer?.photo);
+  const [photo, setPhoto] = useState<string | undefined>(undefined);
   const [currentStep, setCurrentStep] = useState(1);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const addFarmer = useAppStore((state) => state.addFarmer);
