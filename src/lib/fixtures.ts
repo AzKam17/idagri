@@ -2,7 +2,6 @@ import {
   Farmer,
   Plantation,
   Employee,
-  Farmer,
   Weighing,
   Credit,
   Transporter,
@@ -238,7 +237,7 @@ export const weighings: Weighing[] = [
   // PLT-001 weighings
   {
     id: '1',
-    planterId: '1',
+    farmerId: '1',
     period: 'PA-11/2024-1',
     weighingDate: getDateOnly(45),
     transporterId: '1',
@@ -256,7 +255,7 @@ export const weighings: Weighing[] = [
   },
   {
     id: '2',
-    planterId: '1',
+    farmerId: '1',
     period: 'PA-12/2024-1',
     weighingDate: getDateOnly(15),
     transporterId: '1',
@@ -275,7 +274,7 @@ export const weighings: Weighing[] = [
   // PLT-002 weighings
   {
     id: '3',
-    planterId: '2',
+    farmerId: '2',
     period: 'PA-11/2024-1',
     weighingDate: getDateOnly(50),
     transporterId: '2',
@@ -293,7 +292,7 @@ export const weighings: Weighing[] = [
   },
   {
     id: '4',
-    planterId: '2',
+    farmerId: '2',
     period: 'PA-12/2024-1',
     weighingDate: getDateOnly(20),
     transporterId: '2',
@@ -312,7 +311,7 @@ export const weighings: Weighing[] = [
   // PLT-003 weighings
   {
     id: '5',
-    planterId: '3',
+    farmerId: '3',
     period: 'PA-11/2024-1',
     weighingDate: getDateOnly(40),
     transporterId: '1',
@@ -330,7 +329,7 @@ export const weighings: Weighing[] = [
   },
   {
     id: '6',
-    planterId: '3',
+    farmerId: '3',
     period: 'PA-12/2024-1',
     weighingDate: getDateOnly(10),
     transporterId: '3',
@@ -349,7 +348,7 @@ export const weighings: Weighing[] = [
   // PLT-004 weighings
   {
     id: '7',
-    planterId: '4',
+    farmerId: '4',
     period: 'PA-11/2024-1',
     weighingDate: getDateOnly(55),
     transporterId: '2',
@@ -368,7 +367,7 @@ export const weighings: Weighing[] = [
   // PLT-005 weighings
   {
     id: '8',
-    planterId: '5',
+    farmerId: '5',
     period: 'PA-11/2024-1',
     weighingDate: getDateOnly(48),
     transporterId: '3',
@@ -386,7 +385,7 @@ export const weighings: Weighing[] = [
   },
   {
     id: '9',
-    planterId: '5',
+    farmerId: '5',
     period: 'PA-12/2024-1',
     weighingDate: getDateOnly(12),
     transporterId: '1',
@@ -408,7 +407,7 @@ export const weighings: Weighing[] = [
 export const credits: Credit[] = [
   {
     id: '1',
-    planterId: '1',
+    farmerId: '1',
     type: 'money',
     amount: 150000,
     description: 'Avance sur salaire pour scolarité',
@@ -467,7 +466,7 @@ export const credits: Credit[] = [
   },
   {
     id: '2',
-    planterId: '2',
+    farmerId: '2',
     type: 'tools',
     amount: 85000,
     description: 'Achat pulvérisateur et machettes',
@@ -512,7 +511,7 @@ export const credits: Credit[] = [
   },
   {
     id: '3',
-    planterId: '3',
+    farmerId: '3',
     type: 'money',
     amount: 200000,
     description: 'Prêt pour frais médicaux',
@@ -584,7 +583,7 @@ export const credits: Credit[] = [
   },
   {
     id: '4',
-    planterId: '4',
+    farmerId: '4',
     type: 'tools',
     amount: 120000,
     description: 'Achat équipement protection et outils',
@@ -600,7 +599,7 @@ export const credits: Credit[] = [
 export const bulletins: Bulletin[] = [
   {
     id: '1',
-    planterId: '1',
+    farmerId: '1',
     period: 'PA-11/2024-1',
     weighingIds: ['1'],
     grossAmount: 412500, // 1500kg * 275
@@ -622,7 +621,7 @@ export const bulletins: Bulletin[] = [
   },
   {
     id: '2',
-    planterId: '2',
+    farmerId: '2',
     period: 'PA-11/2024-1',
     weighingIds: ['3'],
     grossAmount: 220000, // 800kg * 275
@@ -644,7 +643,7 @@ export const bulletins: Bulletin[] = [
   },
   {
     id: '3',
-    planterId: '3',
+    farmerId: '3',
     period: 'PA-11/2024-1',
     weighingIds: ['5'],
     grossAmount: 632500, // 2300kg * 275
@@ -671,7 +670,6 @@ export const allFixtures = {
   banks,
   transporters,
   vehicles,
-  farmers,
   farmers,
   weighings,
   credits,

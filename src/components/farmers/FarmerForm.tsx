@@ -22,6 +22,10 @@ interface FarmerFormData {
   firstName: string;
   lastName: string;
   village: string;
+  city?: string;
+  profession?: string;
+  nationality?: string;
+  photo?: string;
   plantationSize: number;
   latitude: number;
   longitude: number;
@@ -377,7 +381,7 @@ export function FarmerForm({ farmer, onSuccess }: FarmerFormProps) {
                 <Dropdown
                   appearance="underline"
                   placeholder="Sélectionner un type"
-                  value={idCardTypeLabels[idCardType] || idCardTypeLabels['cni']}
+                  value={(idCardType ? idCardTypeLabels[idCardType] : idCardTypeLabels['cni'])}
                   onOptionSelect={(_, data) => {
                     const newValue = data.optionValue as 'cni' | 'passport' | 'residence_permit';
                     setValue('idCardType', newValue, { shouldValidate: true, shouldDirty: true });

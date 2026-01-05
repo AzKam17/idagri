@@ -1,10 +1,10 @@
-import { Planter, Weighing, Credit, Payment, MonthlyRevenue } from '@/types';
+import { Farmer, Weighing, Credit, Payment, MonthlyRevenue } from '@/types';
 
 export function generatePlanterCode(
   firstName: string,
   lastName: string,
   village: string,
-  existingPlanters: Planter[]
+  existingPlanters: Farmer[]
 ): string {
   const prefix = 'SCAYC';
   const yearSuffix = '12';

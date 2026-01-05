@@ -6,6 +6,10 @@ export interface Farmer {
   firstName: string;
   lastName: string;
   village: string;
+  city?: string;
+  profession?: string;
+  nationality?: string;
+  photo?: string;
   plantationSize: number;
   latitude: number;
   longitude: number;
@@ -240,7 +244,7 @@ export interface FarmerWithPlantations extends Farmer {
   plantations: Plantation[];
 }
 
-export interface PlanterWithDetails extends Planter {
+export interface FarmerWithDetails extends Farmer {
   weighings: Weighing[];
   credits: Credit[];
   payments: Payment[];
