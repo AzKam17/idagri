@@ -76,7 +76,7 @@ function FarmersPageContent() {
     },
     {
       header: 'Superficie (ha)',
-      cell: (farmer) => farmer.plantationSize.toFixed(2),
+      cell: (farmer) => farmer.plantationSize != null ? farmer.plantationSize.toFixed(2) : '–',
     },
     {
       header: 'Nationalité',
