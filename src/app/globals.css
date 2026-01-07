@@ -26,12 +26,7 @@
   --radius-lg: 12px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #1e1e1e;
-    --foreground: #ededed;
-  }
-}
+/* Force light mode always - ignore system preferences */
 
 body {
   background: var(--background);
